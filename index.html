@@ -6,39 +6,140 @@
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* Общие стили */
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            background-color: #f0f0f0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
         }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
         h1 {
-            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 2s;
+        }
+
+        .smiley {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 3s;
+        }
+
+        .continue-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 4s;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards 5s;
+        }
+
+        .button:hover {
+            background: #ff3b2f;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Меню */
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .menu-button {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
     </style>
 </head>
 <body>
-    <h1>Привет!</h1>
+    <div class="container">
+        <div class="smiley" id="smiley">😊</div>
+        <h1 id="welcomeText">Добро пожаловать!</h1>
+        <iframe id="video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <p class="continue-text" id="continueText">Если хотите продолжить, нажмите далее</p>
+        <button class="button" id="nextButton">Далее</button>
+
+        <!-- Меню -->
+        <div class="menu">
+            <button class="menu-button" onclick="alert('Главная')">Главная</button>
+            <button class="menu-button" onclick="alert('О нас')">О нас</button>
+            <button class="menu-button" onclick="alert('Контакты')">Контакты</button>
+        </div>
+    </div>
 
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
 
-        // Показываем кнопку "Закрыть"
+        // Обработчик кнопки "Далее"
+        const nextButton = document.getElementById('nextButton');
+        nextButton.addEventListener('click', () => {
+            alert('Вы нажали "Далее"!');
+            // Здесь можно добавить переход на другой экран или действие
+        });
+
+        // Инициализация Telegram Web App
         tg.MainButton.setText("Закрыть");
         tg.MainButton.show();
         tg.MainButton.onClick(() => {
             tg.close();
         });
-
-        // Можно также получить данные пользователя
-        const user = tg.initDataUnsafe.user;
-        if (user) {
-            console.log("Пользователь:", user);
-        }
     </script>
 </body>
 </html>
