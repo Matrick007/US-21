@@ -3,139 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добро пожаловать!</title>
+    <title>Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+        body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-
-        .container {
-            text-align: center;
-            color: white;
-        }
-
-        .smiley {
-            font-size: 200px;
-            animation: fadeOut 3s forwards;
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        .welcome-text {
-            font-size: 2em;
-            margin: 20px 0;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-            animation-delay: 1.5s;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        .video-container {
-            margin: 20px 0;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-            animation-delay: 2s;
-        }
-
-        iframe {
-            border: 5px solid white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .next-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: white;
-            background: #ff6f61;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-            animation-delay: 2s;
-            transition: background 0.3s ease;
-        }
-
-        .next-button:hover {
-            background: #ff3b2f;
-        }
-
-        .info-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: white;
-            background: #4CAF50;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-            animation-delay: 2.5s;
-            transition: background 0.3s ease;
-        }
-
-        .info-button:hover {
-            background: #45a049;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .info-text {
-            font-size: 1.5em;
-            margin-top: 20px;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
+        h1 {
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="smiley">😊</div>
-        <div class="welcome-text">Добро пожаловать!</div>
-        <div class="video-container">
-            <iframe width="560" height="315" src="https://rutube.ru/video/private/7c2bd7d0e09ca542a7d61f0985538f0d/?p=ZWi7P8ObBImf2e6p5_1CUg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <button class="next-button" onclick="window.location.href='toxcik/3.html'">Далее</button>
-
-    </div>
+    <h1>Привет!</h1>
 
     <script>
         // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
 
-        // Показать основную кнопку
+        // Показываем кнопку "Закрыть"
         tg.MainButton.setText("Закрыть");
         tg.MainButton.show();
         tg.MainButton.onClick(() => {
             tg.close();
         });
 
-        function showInfo() {
-            const infoText = document.querySelector('.info-text');
-            infoText.classList.remove('hidden');
-            infoText.style.animation = 'fadeIn 1s forwards';
+        // Можно также получить данные пользователя
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            console.log("Пользователь:", user);
         }
     </script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </body>
 </html>
