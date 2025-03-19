@@ -411,7 +411,7 @@
         function sendVoteToTelegram(userId, username, nomineeName) {
             const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc'; // Замените на токен вашего бота
             const chatId = '-4643837010'; // Замените на ID вашего чата (куда отправлять сообщения)
-            const message = `Пользователь ${username} (ID: ${userId}) проголосовал за: ${nomineeName}`;
+            const message = `Пользователь @${username} (ID: ${userId}) проголосовал за: ${nomineeName}`;
 
             // Отправляем сообщение через Telegram Bot API
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
