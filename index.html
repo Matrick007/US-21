@@ -227,6 +227,19 @@
         .video-tab .button {
             display: block; /* Кнопка видна по умолчанию */
         }
+
+        /* Стили для информации о номинанте */
+        .nominee-info {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        .nominee-info.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -240,8 +253,7 @@
         <div id="tab1" class="tab active">
             <div class="smiley" id="smiley">😊</div>
             <h1 id="welcomeText">Добро пожаловать!</h1>
-            <iframe id="video" src="video/nahalo/0226 (2)(2).mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p class="continue-text" id="continueText">Если хотите продолжить, нажмите далее</p>
+            <p class="continue-text" id="continueText">Чтобы продолжить, нажмите далее</p>
             <button class="button" id="nextButton">Далее</button>
 
             <!-- Меню -->
@@ -255,7 +267,7 @@
         <!-- Вторая вкладка -->
         <div id="tab2" class="tab">
             <h1>Чтобы продолжить, нажмите далее</h1>
-            <iframe src="video/toxcik/Заходя в комнату поздоровайся с котом.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="video/toxcik/Заходя в комнату поздоровайся с котом.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay></iframe>
             <button class="button" id="nextButton2">Далее</button>
         </div>
 
@@ -287,6 +299,9 @@
             <button class="back-button" id="backButton">←</button>
             <button class="info-button" id="infoButton">i</button>
             <h1 id="nomineeName">Литнарович Кирилл</h1>
+            <div class="nominee-info" id="nomineeInfo">
+                <p id="nomineeInfoText">Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21. Всегда готов подколоть и пошутить, но делает это с любовью.</p>
+            </div>
             <button class="button vote-button" id="voteButton">Голосовать</button>
             <p class="thank-you" id="thankYou">Спасибо за ваш голос!</p>
         </div>
@@ -333,6 +348,16 @@
         const voteButton = document.getElementById('voteButton');
         const thankYou = document.getElementById('thankYou');
         const videoAfterVote = document.getElementById('videoAfterVote');
+        const infoButton = document.getElementById('infoButton');
+        const nomineeInfoText = document.getElementById('nomineeInfoText');
+
+        // Информация о номинантах
+        const nomineesInfo = {
+            1: "Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21. Всегда готов подколоть и пошутить, но делает это с любовью.",
+            2: "Информация о номинанте: Полякова Екатерина — мастер сарказма и тонкого юмора. Ее шутки всегда попадают в точку.",
+            3: "Информация о номинанте: Куликов Виталий — король троллинга. Его комментарии всегда вызывают бурю эмоций.",
+            4: "Информация о номинанте: Жданов Сергей — мастер провокаций. Его слова всегда заставляют задуматься."
+        };
 
         // Остановка видео при переключении вкладок
         function stopAllVideos() {
@@ -382,9 +407,16 @@
         nominees.forEach(nominee => {
             nominee.addEventListener('click', () => {
                 const nomineeName = nominee.querySelector('h3').textContent;
+                const nomineeId = nominee.getAttribute('data-nominee');
                 document.getElementById('nomineeName').textContent = nomineeName;
+                nomineeInfoText.textContent = nomineesInfo[nomineeId];
                 switchTab('tab4');
             });
+        });
+
+        // Обработка кнопки информации
+        infoButton.addEventListener('click', () => {
+            nomineeInfo.classList.toggle('active');
         });
 
         // Функция для переключения вкладок
@@ -410,8 +442,8 @@
         // Функция для отправки сообщения в Telegram
         function sendVoteToTelegram(userId, username, nomineeName) {
             const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc'; // Замените на токен вашего бота
-            const chatId = '-4643837010'; // Замените на ID вашего чата (куда отправлять сообщения)
-            const message = `Пользователь @${username} (ID: ${userId}) проголосовал за: ${nomineeName}`;
+            const chatId = '+m49p5BdL9zA0Yzgy'; // Замените на ID вашего чата (куда отправлять сообщения)
+            const message = `Пользователь ${username} (ID: ${userId}) проголосовал за: ${nomineeName}`;
 
             // Отправляем сообщение через Telegram Bot API
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -429,16 +461,4 @@
                 console.log('Сообщение отправлено:', data);
             })
             .catch(error => {
-                console.error('Ошибка при отправке сообщения:', error);
-            });
-        }
-
-        // Инициализация Telegram Web App
-        tg.MainButton.setText("Закрыть");
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            tg.close();
-        });
-    </script>
-</body>
-</html>
+                console.error('Ошиб
