@@ -2,75 +2,75 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Общие стили */
-        body {
-            font-family: 'Arial', sans-serif;
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #6a11cb, #2575fc);
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             text-align: center;
-            overflow: auto; /* Изменено с hidden на auto */
         }
 
         .container {
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
+            width: 100%;
+            height: 100vh;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            border-radius: 0;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-            max-height: 80vh; /* Ограничение высоты контейнера */
-            overflow-y: auto; /* Включение вертикальной прокрутки внутри контейнера */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            margin: 10px 0;
             animation: fadeIn 1s forwards 1s;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .welcome-text {
-            font-size: 1.5rem;
-            opacity: 0;
+            font-size: clamp(1rem, 3vw, 1.5rem);
             animation: fadeIn 1s forwards 2s;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            padding: 0 10px;
         }
 
         .button {
-            padding: 15px 30px;
+            padding: 12px 24px;
             background: #ff6f61;
             color: white;
             border: none;
             border-radius: 25px;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             cursor: pointer;
             transition: background 0.3s ease, transform 0.3s ease;
-            opacity: 0;
             animation: fadeIn 1s forwards 3s;
             box-shadow: 0 4px 15px rgba(255, 111, 97, 0.4);
+            touch-action: manipulation;
+            margin: 10px auto;
+            display: block;
         }
 
         .button:hover {
             background: #ff3b2f;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
-        /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -78,19 +78,20 @@
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-10px); }
         }
 
-        /* Скрытые вкладки */
         .tab {
             display: none;
+            padding: 10px;
         }
 
         .tab.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
-        /* Эпичный фон с параллакс-эффектом */
         .parallax-background {
             position: fixed;
             top: 0;
@@ -104,11 +105,9 @@
 
         .stars {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="2" fill="white" /><circle cx="30%" cy="50%" r="1" fill="white" /><circle cx="70%" cy="10%" r="1.5" fill="white" /><circle cx="90%" cy="80%" r="2" fill="white" /><circle cx="50%" cy="30%" r="1" fill="white" /></svg>');
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="1" fill="white" /><circle cx="30%" cy="50%" r="0.5" fill="white" /><circle cx="70%" cy="10%" r="0.75" fill="white" /><circle cx="90%" cy="80%" r="1" fill="white" /><circle cx="50%" cy="30%" r="0.5" fill="white" /></svg>');
             animation: float 8s ease-in-out infinite;
         }
 
@@ -116,57 +115,59 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
             transform: translate(-50%, -50%);
             border-radius: 50%;
-            filter: blur(50px);
+            filter: blur(30px);
             animation: glowPulse 3s ease-in-out infinite;
         }
 
         @keyframes glowPulse {
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.2); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
         }
 
-        /* Стили для номинантов */
         .nominees {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 15px;
+            margin: 15px 0;
         }
 
         .nominee-subblock {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
         }
 
         .nominee {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
             transition: transform 0.3s ease;
-            cursor: pointer;
             position: relative;
+            touch-action: manipulation;
         }
 
         .nominee:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .nominee img {
             width: 100%;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
         }
 
         .nominee h3 {
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
             margin: 0;
+            word-break: break-word;
         }
 
         .nominee.selected {
@@ -179,7 +180,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: none;
-            gap: 10px;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
         }
 
         .nominee:hover .nominee-actions {
@@ -193,109 +197,104 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            flex: 1;
         }
 
-        /* Стили для вкладки с номинантом */
         .nominee-tab {
             position: relative;
+            padding-top: 50px;
         }
 
-        .back-button {
+        .back-button, .info-button {
             position: absolute;
             top: 10px;
-            left: 10px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 1.2rem;
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            touch-action: manipulation;
         }
 
-        .info-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .back-button { left: 10px; }
+        .info-button { right: 10px; }
 
         .vote-button {
-            margin-top: 20px;
+            margin: 15px auto;
         }
 
-        .thank-you {
-            display: none;
-            font-size: 1.5rem;
-            margin-top: 20px;
-        }
-
-        /* Стили для информации о номинанте */
         .nominee-info {
             display: none;
-            margin-top: 20px;
-            padding: 15px;
+            margin: 15px 0;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            border-radius: 10px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .nominee-info.active {
             display: block;
         }
 
+        .row-title {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin: 15px 0 10px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 50vh;
+            border: none;
+            border-radius: 10px;
+        }
+
         .submit-button {
-            margin-top: 20px;
+            margin: 20px auto;
             display: none;
         }
 
-        /* Стили для заголовков строк */
-        .row-title {
-            font-size: 1.5rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+            }
+            
+            .nominee-subblock {
+                grid-template-columns: 1fr;
+            }
+            
+            .button {
+                padding: 10px 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Эпичный фон с параллакс-эффектом -->
     <div class="parallax-background">
         <div class="stars"></div>
         <div class="glow"></div>
     </div>
 
     <div class="container">
-        <!-- Первая вкладка -->
         <div id="tab1" class="tab active">
             <h1 id="welcomeText">Добро пожаловать!</h1>
             <p class="welcome-text">Мы рады видеть вас здесь!</p>
             <button class="button" id="nextButton">Начать</button>
         </div>
 
-        <!-- Вторая вкладка -->
         <div id="tab2" class="tab">
             <iframe src="video/toxcik/Заходя в комнату поздоровайся с котом.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay></iframe>
             <button class="button" id="nextButton2">Голосовать</button>
         </div>
 
-        <!-- Третья вкладка (Голосование) -->
         <div id="tab3" class="tab">
             <h1>Голосование</h1>
 
-            <!-- Токсик года -->
             <div class="row-title">Токсик года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
@@ -336,12 +335,11 @@
                 </div>
             </div>
 
-            <!-- Оператор года -->
             <div class="row-title">Оператор года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="5" data-row="2">
-                        <img src="photo/operator/лукин.png" alt="Номинант 1">
+                        <img src="photo/operator/лукин.png" alt="Лукин Александр">
                         <h3>Лукин Александр</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -349,7 +347,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="6" data-row="2">
-                        <img src="photo/operator/galkin.png" alt="Номинант 2">
+                        <img src="photo/operator/galkin.png" alt="Галкин Виталий">
                         <h3>Галкин Виталий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -359,7 +357,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="7" data-row="2">
-                        <img src="photo/operator/litnarovich.png" alt="Номинант 3">
+                        <img src="photo/operator/litnarovich.png" alt="Литнарович Кирилл">
                         <h3>Литнарович Кирилл</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -367,7 +365,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="8" data-row="2">
-                        <img src="photo/operator/туленков.png" alt="Номинант 4">
+                        <img src="photo/operator/туленков.png" alt="Туленков Андрей">
                         <h3>Туленков Андрей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -377,12 +375,11 @@
                 </div>
             </div>
 
-            <!-- Пара Года -->
             <div class="row-title">Пара Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="9" data-row="3">
-                        <img src="photo/para/дима.jpg" alt="Пара 1">
+                        <img src="photo/para/дима.jpg" alt="Дмитрий и Алина">
                         <h3>Дмитрий и Алина</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -390,7 +387,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="10" data-row="3">
-                        <img src="photo/para/куликов.jpg" alt="Пара 2">
+                        <img src="photo/para/куликов.jpg" alt="Виталик и Полина">
                         <h3>Виталик и Полина</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -400,7 +397,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="11" data-row="3">
-                        <img src="photo/para/рита.jpg" alt="Пара 3">
+                        <img src="photo/para/рита.jpg" alt="Рита и Арсений">
                         <h3>Рита и Арсений</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -408,7 +405,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="12" data-row="3">
-                        <img src="photo/para/эльчин.jpg" alt="Пара 4">
+                        <img src="photo/para/эльчин.jpg" alt="Эльчин и Кира">
                         <h3>Эльчин и Кира</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -418,12 +415,11 @@
                 </div>
             </div>
 
-            <!-- Воздухан Года -->
             <div class="row-title">Воздухан Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="13" data-row="4">
-                        <img src="photo/air/воздухан1.jpg" alt="Воздухан 1">
+                        <img src="photo/air/воздухан1.jpg" alt="Петров Иван">
                         <h3>Петров Иван</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -431,7 +427,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="14" data-row="4">
-                        <img src="photo/air/воздухан2.jpg" alt="Воздухан 2">
+                        <img src="photo/air/воздухан2.jpg" alt="Сидоров Алексей">
                         <h3>Сидоров Алексей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -441,7 +437,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="15" data-row="4">
-                        <img src="photo/air/воздухан3.jpg" alt="Воздухан 3">
+                        <img src="photo/air/воздухан3.jpg" alt="Козлов Дмитрий">
                         <h3>Козлов Дмитрий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -449,7 +445,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="16" data-row="4">
-                        <img src="photo/air/воздухан4.jpg" alt="Воздухан 4">
+                        <img src="photo/air/воздухан4.jpg" alt="Васильев Сергей">
                         <h3>Васильев Сергей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -459,12 +455,11 @@
                 </div>
             </div>
 
-            <!-- Самый Спокойный Года -->
             <div class="row-title">Самый Спокойный Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="17" data-row="5">
-                        <img src="photo/calm/спокойный1.jpg" alt="Спокойный 1">
+                        <img src="photo/calm/спокойный1.jpg" alt="Иванов Михаил">
                         <h3>Иванов Михаил</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -472,7 +467,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="18" data-row="5">
-                        <img src="photo/calm/спокойный2.jpg" alt="Спокойный 2">
+                        <img src="photo/calm/спокойный2.jpg" alt="Петров Николай">
                         <h3>Петров Николай</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -482,7 +477,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="19" data-row="5">
-                        <img src="photo/calm/спокойный3.jpg" alt="Спокойный 3">
+                        <img src="photo/calm/спокойный3.jpg" alt="Сидоров Олег">
                         <h3>Сидоров Олег</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -490,7 +485,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="20" data-row="5">
-                        <img src="photo/calm/спокойный4.jpg" alt="Спокойный 4">
+                        <img src="photo/calm/спокойный4.jpg" alt="Козлов Павел">
                         <h3>Козлов Павел</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -500,12 +495,11 @@
                 </div>
             </div>
 
-            <!-- Канал Года -->
             <div class="row-title">Канал Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="21" data-row="6">
-                        <img src="photo/channel/канал1.jpg" alt="Канал 1">
+                        <img src="photo/channel/канал1.jpg" alt="Канал 'Звезды'">
                         <h3>Канал "Звезды"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -513,7 +507,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="22" data-row="6">
-                        <img src="photo/channel/канал2.jpg" alt="Канал 2">
+                        <img src="photo/channel/канал2.jpg" alt="Канал 'Мемы'">
                         <h3>Канал "Мемы"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -523,7 +517,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="23" data-row="6">
-                        <img src="photo/channel/канал3.jpg" alt="Канал 3">
+                        <img src="photo/channel/канал3.jpg" alt="Канал 'Новости'">
                         <h3>Канал "Новости"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -531,7 +525,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="24" data-row="6">
-                        <img src="photo/channel/канал4.jpg" alt="Канал 4">
+                        <img src="photo/channel/канал4.jpg" alt="Канал 'Искры'">
                         <h3>Канал "Искры"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -541,12 +535,11 @@
                 </div>
             </div>
 
-            <!-- Пропажа Года -->
             <div class="row-title">Пропажа Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="25" data-row="7">
-                        <img src="photo/missing/пропажа1.jpg" alt="Пропажа 1">
+                        <img src="photo/missing/пропажа1.jpg" alt="Иванов Сергей">
                         <h3>Иванов Сергей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -554,7 +547,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="26" data-row="7">
-                        <img src="photo/missing/пропажа2.jpg" alt="Пропажа 2">
+                        <img src="photo/missing/пропажа2.jpg" alt="Петров Алексей">
                         <h3>Петров Алексей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -564,7 +557,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="27" data-row="7">
-                        <img src="photo/missing/пропажа3.jpg" alt="Пропажа 3">
+                        <img src="photo/missing/пропажа3.jpg" alt="Сидоров Игорь">
                         <h3>Сидоров Игорь</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -572,7 +565,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="28" data-row="7">
-                        <img src="photo/missing/пропажа4.jpg" alt="Пропажа 4">
+                        <img src="photo/missing/пропажа4.jpg" alt="Козлов Виктор">
                         <h3>Козлов Виктор</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -582,12 +575,11 @@
                 </div>
             </div>
 
-            <!-- Прорыв Года -->
             <div class="row-title">Прорыв Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="29" data-row="8">
-                        <img src="photo/breakthrough/прорыв1.jpg" alt="Прорыв 1">
+                        <img src="photo/breakthrough/прорыв1.jpg" alt="Иванов Дмитрий">
                         <h3>Иванов Дмитрий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -595,7 +587,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="30" data-row="8">
-                        <img src="photo/breakthrough/прорыв2.jpg" alt="Прорыв 2">
+                        <img src="photo/breakthrough/прорыв2.jpg" alt="Петров Андрей">
                         <h3>Петров Андрей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -605,7 +597,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="31" data-row="8">
-                        <img src="photo/breakthrough/прорыв3.jpg" alt="Прорыв 3">
+                        <img src="photo/breakthrough/прорыв3.jpg" alt="Сидоров Павел">
                         <h3>Сидоров Павел</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -613,7 +605,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="32" data-row="8">
-                        <img src="photo/breakthrough/прорыв4.jpg" alt="Прорыв 4">
+                        <img src="photo/breakthrough/прорыв4.jpg" alt="Козлов Олег">
                         <h3>Козлов Олег</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -623,12 +615,11 @@
                 </div>
             </div>
 
-            <!-- Мем Года -->
             <div class="row-title">Мем Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="33" data-row="9">
-                        <img src="photo/meme/мем1.jpg" alt="Мем 1">
+                        <img src="photo/meme/мем1.jpg" alt="Мем 'Кот'">
                         <h3>Мем "Кот"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -636,7 +627,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="34" data-row="9">
-                        <img src="photo/meme/мем2.jpg" alt="Мем 2">
+                        <img src="photo/meme/мем2.jpg" alt="Мем 'Пес'">
                         <h3>Мем "Пес"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -646,7 +637,7 @@
                 </div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="35" data-row="9">
-                        <img src="photo/meme/мем3.jpg" alt="Мем 3">
+                        <img src="photo/meme/мем3.jpg" alt="Мем 'Енот'">
                         <h3>Мем "Енот"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -654,7 +645,7 @@
                         </div>
                     </div>
                     <div class="nominee" data-nominee="36" data-row="9">
-                        <img src="photo/meme/мем4.jpg" alt="Мем 4">
+                        <img src="photo/meme/мем4.jpg" alt="Мем 'Лиса'">
                         <h3>Мем "Лиса"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
@@ -667,7 +658,6 @@
             <button class="button submit-button" id="submitVotes">Отправить</button>
         </div>
 
-        <!-- Вкладка с номинантом -->
         <div id="tab4" class="tab nominee-tab">
             <button class="back-button" id="backButton">←</button>
             <button class="info-button" id="infoButton">i</button>
@@ -678,7 +668,6 @@
             <button class="button vote-button" id="voteButton">Голосовать</button>
         </div>
 
-        <!-- Вкладка с благодарностью -->
         <div id="tab5" class="tab">
             <h1>Спасибо что потратили свое время!</h1>
         </div>
@@ -687,7 +676,6 @@
     <script>
         const tg = window.Telegram.WebApp;
 
-        // Переключение вкладок
         const tabs = document.querySelectorAll('.tab');
         const nextButton = document.getElementById('nextButton');
         const nextButton2 = document.getElementById('nextButton2');
@@ -698,7 +686,6 @@
         const nomineeInfo = document.getElementById('nomineeInfo');
         const nomineeInfoText = document.getElementById('nomineeInfoText');
 
-        // Информация о номинантах
         const nomineesInfo = {
             1: "Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21. Всегда готов подколоть и пошутить, но делает это с любовью.",
             2: "Информация о номинанте: Полякова Екатерина — мастер сарказма и тонкого юмора. Ее шутки всегда попадают в точку.",
@@ -708,10 +695,10 @@
             6: "Информация о номинанте: Галкин Виталий — мастер своего дела.",
             7: "Информация о номинанте: Литнарович Кирилл — универсальный талант.",
             8: "Информация о номинанте: Туленков Андрей — надежный и профессиональный.",
-            9: "Информация о номинанте: Иванов и Петрова — идеальная пара.",
-            10: "Информация о номинанте: Сидоров и Смирнова — гармония в отношениях.",
-            11: "Информация о номинанте: Козлов и Морозова — яркая пара года.",
-            12: "Информация о номинанте: Васильев и Кузнецова — любовь и поддержка.",
+            9: "Информация о номинанте: Дмитрий и Алина — идеальная пара.",
+            10: "Информация о номинанте: Виталик и Полина — гармония в отношениях.",
+            11: "Информация о номинанте: Рита и Арсений — яркая пара года.",
+            12: "Информация о номинанте: Эльчин и Кира — любовь и поддержка.",
             13: "Информация о номинанте: Петров Иван — мастер пустых обещаний.",
             14: "Информация о номинанте: Сидоров Алексей — король воздуха.",
             15: "Информация о номинанте: Козлов Дмитрий — всегда витает в облаках.",
@@ -738,10 +725,8 @@
             36: "Информация о номинанте: Мем 'Лиса' — остроумный выбор."
         };
 
-        // Выбранные номинанты
         const selectedNominees = {};
 
-        // Остановка видео при переключении вкладок
         function stopAllVideos() {
             const videos = document.querySelectorAll('iframe');
             videos.forEach(video => {
@@ -764,13 +749,11 @@
             switchTab('tab3');
         });
 
-        // Обработка голосования
         voteButton.addEventListener('click', () => {
             const nomineeName = document.getElementById('nomineeName').textContent;
             const userId = tg.initDataUnsafe.user?.id || 'Аноним';
             const username = tg.initDataUnsafe.user?.username || 'Аноним';
 
-            // Отправляем данные о голосовании
             sendVoteToTelegram(userId, username, nomineeName);
 
             setTimeout(() => {
@@ -778,7 +761,6 @@
             }, 2000);
         });
 
-        // Обработка выбора номинанта
         const nominees = document.querySelectorAll('.nominee');
         nominees.forEach(nominee => {
             const voteAction = nominee.querySelector('.vote-action');
@@ -790,10 +772,8 @@
                 const nomineeId = nominee.getAttribute('data-nominee');
                 selectedNominees[row] = nomineeId;
 
-                // Помечаем выбранный столбец
                 nominee.classList.add('selected');
 
-                // Отключаем другие столбцы в этой строке
                 document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
                     if (n !== nominee) {
                         n.style.pointerEvents = 'none';
@@ -814,7 +794,6 @@
             });
         });
 
-        // Проверка, все ли голоса выбраны
         function checkAllVotes() {
             const rows = new Set([...document.querySelectorAll('.nominee')].map(n => n.getAttribute('data-row')));
             if (rows.size === Object.keys(selectedNominees).length) {
@@ -822,39 +801,34 @@
             }
         }
 
-        // Обработка кнопки "Отправить"
         submitVotes.addEventListener('click', () => {
             const userId = tg.initDataUnsafe.user?.id || 'Аноним';
             const username = tg.initDataUnsafe.user?.username || 'Аноним';
 
-            // Отправляем данные о голосовании
             sendVoteToTelegram(userId, username, selectedNominees);
 
-            // Переход на вкладку с благодарностью
             switchTab('tab5');
 
-            // Закрытие приложения через 3 секунды
             setTimeout(() => {
                 tg.close();
             }, 3000);
         });
 
-        // Обработка кнопки информации
         infoButton.addEventListener('click', () => {
             nomineeInfo.classList.toggle('active');
         });
 
-        // Функция для переключения вкладок
         function switchTab(tabId) {
             tabs.forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Функция для отправки сообщения в Telegram
         function sendVoteToTelegram(userId, username, selectedNominees) {
             const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
             const chatId = '-4643837010';
-            const message = `Пользователь ${username} (ID: ${userId}) проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `Строка ${row}: ${nominee}`).join('\n')}`;
+            const message = typeof selectedNominees === 'string' 
+                ? `Пользователь ${username} (ID: ${userId}) проголосовал за: ${selectedNominees}`
+                : `Пользователь ${username} (ID: ${userId}) проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `Строка ${row}: ${nominee}`).join('\n')}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -875,7 +849,6 @@
             });
         }
 
-        // Инициализация Telegram Web App
         tg.MainButton.setText("Закрыть");
         tg.MainButton.show();
         tg.MainButton.onClick(() => {
