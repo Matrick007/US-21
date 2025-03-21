@@ -23,6 +23,7 @@
             overflow: auto;
             position: relative;
             perspective: 1000px;
+            -webkit-tap-highlight-color: transparent; /* Убирает подсветку при тапе на мобильных */
         }
 
         .background {
@@ -119,6 +120,7 @@
             box-shadow: 0 10px 30px rgba(81, 111, 255, 0.6), 0 0 20px rgba(255, 111, 145, 0.4);
             position: relative;
             overflow: hidden;
+            touch-action: manipulation; /* Улучшает сенсорное взаимодействие */
         }
 
         .button::before {
@@ -134,12 +136,14 @@
             transition: width 0.6s ease, height 0.6s ease;
         }
 
-        .button:hover::before {
+        .button:hover::before,
+        .button:active::before {
             width: 300px;
             height: 300px;
         }
 
-        .button:hover {
+        .button:hover,
+        .button:active {
             transform: scale(1.05) translateY(-5px);
             box-shadow: 0 15px 40px rgba(81, 111, 255, 0.8), 0 0 30px rgba(255, 111, 145, 0.6);
         }
@@ -159,12 +163,27 @@
             50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.5; }
         }
 
+        @keyframes tabTransitionOut {
+            0% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
+            100% { opacity: 0; transform: scale(0.8) rotateX(20deg); filter: blur(10px); }
+        }
+
+        @keyframes tabTransitionIn {
+            0% { opacity: 0; transform: scale(1.2) rotateX(-20deg); filter: blur(10px); }
+            100% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
+        }
+
         .tab {
             display: none;
+            animation: tabTransitionIn 0.6s ease-out forwards;
         }
 
         .tab.active {
             display: block;
+        }
+
+        .tab.exiting {
+            animation: tabTransitionOut 0.6s ease-in forwards;
         }
 
         .nominees {
@@ -192,9 +211,11 @@
             border: 1px solid rgba(81, 111, 255, 0.3);
             transform: rotateX(10deg);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            user-select: none; /* Предотвращает выделение текста при тапе */
         }
 
-        .nominee:hover {
+        .nominee:hover,
+        .nominee:active {
             transform: rotateX(0deg) translateY(-10px);
             box-shadow: 0 20px 50px rgba(81, 111, 255, 0.5), 0 0 30px rgba(255, 111, 145, 0.3);
             border: 1px solid rgba(81, 111, 255, 0.8);
@@ -208,7 +229,8 @@
             filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
         }
 
-        .nominee:hover img {
+        .nominee:hover img,
+        .nominee:active img {
             transform: scale(1.1);
         }
 
@@ -241,66 +263,71 @@
             z-index: 2;
         }
 
-        .nominee:hover .nominee-actions {
+        .nominee:hover .nominee-actions,
+        .nominee.active .nominee-actions {
             display: flex;
             opacity: 1;
         }
 
-        .nominee-actions button {
-            padding: 12px 25px;
+        .vote-action {
+            padding: 15px 30px;
             border: none;
-            border-radius: 40px;
-            font-size: 1rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.4s ease;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             color: #fff;
-            background: linear-gradient(45deg, #ff6f91, #516fff);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff6f91, #516fff, #00c4cc);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(81, 111, 255, 0.6);
             position: relative;
             overflow: hidden;
+            animation: pulse 2s infinite;
+            touch-action: manipulation;
         }
 
-        .nominee-actions button::before {
+        .vote-action::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.6s ease, height 0.6s ease;
         }
 
-        .nominee-actions button:hover::before {
-            width: 300px;
-            height: 300px;
+        .vote-action:hover::before,
+        .vote-action:active::before {
+            width: 400px;
+            height: 400px;
         }
 
-        .nominee-actions button:hover {
-            transform: scale(1.05) translateY(-3px);
-            box-shadow: 0 15px 30px rgba(81, 111, 255, 0.6);
+        .vote-action:hover,
+        .vote-action:active {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(81, 111, 255, 0.8), 0 0 50px rgba(255, 111, 145, 0.7);
+            background: linear-gradient(45deg, #00c4cc, #ff6f91, #516fff);
         }
 
-        .nominee-actions .info-action {
-            background: linear-gradient(45deg, #00c4cc, #516fff);
-        }
-
-        .nominee-actions .info-action:hover {
-            background: linear-gradient(45deg, #516fff, #00c4cc);
+        @keyframes pulse {
+            0% { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(81, 111, 255, 0.6); }
+            50% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 40px rgba(81, 111, 255, 0.8); }
+            100% { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(81, 111, 255, 0.6); }
         }
 
         .nominee-tab {
             position: relative;
         }
 
-        .back-button, .info-button {
+        .back-button {
             position: absolute;
             top: 20px;
+            left: 20px;
             background: rgba(81, 111, 255, 0.2);
             color: #fff;
             border: none;
@@ -314,23 +341,17 @@
             justify-content: center;
             transition: all 0.4s ease;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
         }
 
-        .back-button:hover, .info-button:hover {
+        .back-button:hover,
+        .back-button:active {
             background: rgba(81, 111, 255, 0.5);
             transform: scale(1.15) rotate(5deg);
             box-shadow: 0 15px 30px rgba(81, 111, 255, 0.6);
         }
 
-        .back-button { left: 20px; }
-        .info-button { right: 20px; }
-
-        .vote-button {
-            margin-top: 30px;
-        }
-
         .nominee-info {
-            display: none;
             margin-top: 25px;
             padding: 25px;
             background: rgba(30, 30, 60, 0.8);
@@ -342,10 +363,6 @@
             transition: all 0.4s ease;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
-        }
-
-        .nominee-info.active {
-            display: block;
         }
 
         .submit-button {
@@ -368,8 +385,8 @@
             h1 { font-size: 2.5rem; }
             .welcome-text { font-size: 1.2rem; }
             .button { font-size: 1.1rem; padding: 12px 25px; }
+            .vote-action { font-size: 1rem; padding: 12px 25px; }
             .nominee h3 { font-size: 1rem; }
-            .nominee-actions button { font-size: 0.9rem; padding: 10px 20px; }
             .row-title { font-size: 1.7rem; }
             .container { padding: 20px; }
             .glow-effect { width: 300px; height: 300px; }
@@ -381,6 +398,16 @@
     <div class="background"></div>
     <div class="particles"></div>
     <div class="glow-effect"></div>
+
+    <audio id="clickSound" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/sci-fi-click.mp3" type="audio/mp3">
+    </audio>
+    <audio id="transitionSound" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/sci-fi-transition.mp3" type="audio/mp3">
+    </audio>
+    <audio id="voteSound" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/sci-fi-confirm.mp3" type="audio/mp3">
+    </audio>
 
     <div class="container">
         <div id="tab1" class="tab active">
@@ -405,7 +432,6 @@
                         <h3>Литнарович Кирилл</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="2" data-row="1">
@@ -413,7 +439,6 @@
                         <h3>Полякова Екатерина</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -423,7 +448,6 @@
                         <h3>Куликов Виталий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="4" data-row="1">
@@ -431,7 +455,6 @@
                         <h3>Жданов Сергей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -445,7 +468,6 @@
                         <h3>Лукин Александр</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="6" data-row="2">
@@ -453,7 +475,6 @@
                         <h3>Галкин Виталий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -463,7 +484,6 @@
                         <h3>Литнарович Кирилл</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="8" data-row="2">
@@ -471,7 +491,6 @@
                         <h3>Туленков Андрей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -485,7 +504,6 @@
                         <h3>Дмитрий и Алина</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="10" data-row="3">
@@ -493,7 +511,6 @@
                         <h3>Виталик и Полина</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -503,7 +520,6 @@
                         <h3>Рита и Арсений</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="12" data-row="3">
@@ -511,7 +527,6 @@
                         <h3>Эльчин и Кира</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -525,7 +540,6 @@
                         <h3>Петров Иван</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="14" data-row="4">
@@ -533,7 +547,6 @@
                         <h3>Сидоров Алексей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -543,7 +556,6 @@
                         <h3>Козлов Дмитрий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="16" data-row="4">
@@ -551,7 +563,6 @@
                         <h3>Васильев Сергей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -565,7 +576,6 @@
                         <h3>Иванов Михаил</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="18" data-row="5">
@@ -573,7 +583,6 @@
                         <h3>Петров Николай</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -583,7 +592,6 @@
                         <h3>Сидоров Олег</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="20" data-row="5">
@@ -591,7 +599,6 @@
                         <h3>Козлов Павел</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -605,7 +612,6 @@
                         <h3>Канал "Звезды"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="22" data-row="6">
@@ -613,7 +619,6 @@
                         <h3>Канал "Мемы"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -623,7 +628,6 @@
                         <h3>Канал "Новости"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="24" data-row="6">
@@ -631,7 +635,6 @@
                         <h3>Канал "Искры"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -645,7 +648,6 @@
                         <h3>Иванов Сергей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="26" data-row="7">
@@ -653,7 +655,6 @@
                         <h3>Петров Алексей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -663,7 +664,6 @@
                         <h3>Сидоров Игорь</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="28" data-row="7">
@@ -671,7 +671,6 @@
                         <h3>Козлов Виктор</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -685,7 +684,6 @@
                         <h3>Иванов Дмитрий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="30" data-row="8">
@@ -693,7 +691,6 @@
                         <h3>Петров Андрей</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -703,7 +700,6 @@
                         <h3>Сидоров Павел</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="32" data-row="8">
@@ -711,7 +707,6 @@
                         <h3>Козлов Олег</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -725,7 +720,6 @@
                         <h3>Мем "Кот"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="34" data-row="9">
@@ -733,7 +727,6 @@
                         <h3>Мем "Пес"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
@@ -743,7 +736,6 @@
                         <h3>Мем "Енот"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="36" data-row="9">
@@ -751,23 +743,12 @@
                         <h3>Мем "Лиса"</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
-                            <button class="info-action">Информация</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <button class="button submit-button" id="submitVotes">Отправить</button>
-        </div>
-
-        <div id="tab4" class="tab nominee-tab">
-            <button class="back-button" id="backButton">←</button>
-            <button class="info-button" id="infoButton">i</button>
-            <h1 id="nomineeName">Литнарович Кирилл</h1>
-            <div class="nominee-info" id="nomineeInfo">
-                <p id="nomineeInfoText">Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21.</p>
-            </div>
-            <button class="button vote-button" id="voteButton">Голосовать</button>
         </div>
 
         <div id="tab5" class="tab">
@@ -780,51 +761,11 @@
         const tabs = document.querySelectorAll('.tab');
         const nextButton = document.getElementById('nextButton');
         const nextButton2 = document.getElementById('nextButton2');
-        const backButton = document.getElementById('backButton');
-        const voteButton = document.getElementById('voteButton');
         const submitVotes = document.getElementById('submitVotes');
-        const infoButton = document.getElementById('infoButton');
-        const nomineeInfo = document.getElementById('nomineeInfo');
-        const nomineeInfoText = document.getElementById('nomineeInfoText');
 
-        const nomineesInfo = {
-            1: "Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21. Всегда готов подколоть и пошутить, но делает это с любовью.",
-            2: "Информация о номинанте: Полякова Екатерина — мастер сарказма и тонкого юмора. Ее шутки всегда попадают в точку.",
-            3: "Информация о номинанте: Куликов Виталий — король троллинга. Его комментарии всегда вызывают бурю эмоций.",
-            4: "Информация о номинанте: Жданов Сергей — мастер провокаций. Его слова всегда заставляют задуматься.",
-            5: "Информация о номинанте: Лукин Александр — лучший оператор, всегда на высоте.",
-            6: "Информация о номинанте: Галкин Виталий — мастер своего дела.",
-            7: "Информация о номинанте: Литнарович Кирилл — универсальный талант.",
-            8: "Информация о номинанте: Туленков Андрей — надежный и профессиональный.",
-            9: "Информация о номинанте: Дмитрий и Алина — идеальная пара.",
-            10: "Информация о номинанте: Виталик и Полина — гармония в отношениях.",
-            11: "Информация о номинанте: Рита и Арсений — яркая пара года.",
-            12: "Информация о номинанте: Эльчин и Кира — любовь и поддержка.",
-            13: "Информация о номинанте: Петров Иван — мастер пустых обещаний.",
-            14: "Информация о номинанте: Сидоров Алексей — король воздуха.",
-            15: "Информация о номинанте: Козлов Дмитрий — всегда витает в облаках.",
-            16: "Информация о номинанте: Васильев Сергей — чемпион по пустословию.",
-            17: "Информация о номинанте: Иванов Михаил — воплощение спокойствия.",
-            18: "Информация о номинанте: Петров Николай — невозмутимый как скала.",
-            19: "Информация о номинанте: Сидоров Олег — мастер дзена.",
-            20: "Информация о номинанте: Козлов Павел — всегда спокоен.",
-            21: "Информация о номинанте: Канал 'Звезды' — яркий контент.",
-            22: "Информация о номинанте: Канал 'Мемы' — смех каждый день.",
-            23: "Информация о номинанте: Канал 'Новости' — всегда в курсе.",
-            24: "Информация о номинанте: Канал 'Искры' — креатив и энергия.",
-            25: "Информация о номинанте: Иванов Сергей — пропал без вести.",
-            26: "Информация о номинанте: Петров Алексей — исчез внезапно.",
-            27: "Информация о номинанте: Сидоров Игорь — где он?",
-            28: "Информация о номинанте: Козлов Виктор — потерялся в толпе.",
-            29: "Информация о номинанте: Иванов Дмитрий — неожиданный успех.",
-            30: "Информация о номинанте: Петров Андрей — прорыв года.",
-            31: "Информация о номинанте: Сидоров Павел — взлет на вершину.",
-            32: "Информация о номинанте: Козлов Олег — новое имя года.",
-            33: "Информация о номинанте: Мем 'Кот' — классика юмора.",
-            34: "Информация о номинанте: Мем 'Пес' — всегда в тренде.",
-            35: "Информация о номинанте: Мем 'Енот' — неожиданный хит.",
-            36: "Информация о номинанте: Мем 'Лиса' — остроумный выбор."
-        };
+        const clickSound = document.getElementById('clickSound');
+        const transitionSound = document.getElementById('transitionSound');
+        const voteSound = document.getElementById('voteSound');
 
         const selectedNominees = {};
 
@@ -835,52 +776,52 @@
             });
         }
 
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play().catch(error => console.error('Ошибка воспроизведения звука:', error));
+        }
+
         nextButton.addEventListener('click', () => {
+            playSound(clickSound);
             stopAllVideos();
             switchTab('tab2');
         });
 
         nextButton2.addEventListener('click', () => {
+            playSound(clickSound);
             stopAllVideos();
             switchTab('tab3');
-        });
-
-        backButton.addEventListener('click', () => {
-            stopAllVideos();
-            switchTab('tab3');
-        });
-
-        voteButton.addEventListener('click', () => {
-            const nomineeName = document.getElementById('nomineeName').textContent;
-            const userId = tg.initDataUnsafe.user?.id || 'Аноним';
-            const username = tg.initDataUnsafe.user?.username || 'Аноним';
-            sendVoteToTelegram(userId, username, nomineeName);
-            setTimeout(() => switchTab('tab5'), 2000);
         });
 
         const nominees = document.querySelectorAll('.nominee');
         nominees.forEach(nominee => {
             const voteAction = nominee.querySelector('.vote-action');
-            const infoAction = nominee.querySelector('.info-action');
 
-            nominee.addEventListener('touchstart', () => {
-                nominee.querySelector('.nominee-actions').style.display = 'flex';
-                setTimeout(() => {
-                    nominee.querySelector('.nominee-actions').style.opacity = '1';
-                }, 10);
+            // Поддержка мыши
+            nominee.addEventListener('mouseenter', () => {
+                nominee.classList.add('active');
+            });
+            nominee.addEventListener('mouseleave', () => {
+                nominee.classList.remove('active');
             });
 
+            // Поддержка сенсорных устройств
+            nominee.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                nominee.classList.add('active');
+            });
             nominee.addEventListener('touchend', () => {
                 setTimeout(() => {
-                    nominee.querySelector('.nominee-actions').style.opacity = '0';
-                    setTimeout(() => {
-                        nominee.querySelector('.nominee-actions').style.display = 'none';
-                    }, 300);
+                    nominee.classList.remove('active');
                 }, 2000);
+            });
+            nominee.addEventListener('touchcancel', () => {
+                nominee.classList.remove('active');
             });
 
             voteAction.addEventListener('click', (e) => {
                 e.stopPropagation();
+                playSound(voteSound);
                 const row = nominee.getAttribute('data-row');
                 const nomineeId = nominee.getAttribute('data-nominee');
                 selectedNominees[row] = nomineeId;
@@ -894,13 +835,20 @@
                 checkAllVotes();
             });
 
-            infoAction.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const nomineeName = nominee.querySelector('h3').textContent;
+            voteAction.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                playSound(voteSound);
+                const row = nominee.getAttribute('data-row');
                 const nomineeId = nominee.getAttribute('data-nominee');
-                document.getElementById('nomineeName').textContent = nomineeName;
-                nomineeInfoText.textContent = nomineesInfo[nomineeId];
-                switchTab('tab4');
+                selectedNominees[row] = nomineeId;
+                nominee.classList.add('selected');
+                document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
+                    if (n !== nominee) {
+                        n.style.pointerEvents = 'none';
+                        n.style.opacity = '0.5';
+                    }
+                });
+                checkAllVotes();
             });
         });
 
@@ -912,6 +860,7 @@
         }
 
         submitVotes.addEventListener('click', () => {
+            playSound(voteSound);
             const userId = tg.initDataUnsafe.user?.id || 'Аноним';
             const username = tg.initDataUnsafe.user?.username || 'Аноним';
             sendVoteToTelegram(userId, username, selectedNominees);
@@ -919,13 +868,29 @@
             setTimeout(() => tg.close(), 3000);
         });
 
-        infoButton.addEventListener('click', () => {
-            nomineeInfo.classList.toggle('active');
+        submitVotes.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            playSound(voteSound);
+            const userId = tg.initDataUnsafe.user?.id || 'Аноним';
+            const username = tg.initDataUnsafe.user?.username || 'Аноним';
+            sendVoteToTelegram(userId, username, selectedNominees);
+            switchTab('tab5');
+            setTimeout(() => tg.close(), 3000);
         });
 
         function switchTab(tabId) {
-            tabs.forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab) {
+                activeTab.classList.add('exiting');
+                playSound(transitionSound);
+                setTimeout(() => {
+                    activeTab.classList.remove('active', 'exiting');
+                    const newTab = document.getElementById(tabId);
+                    newTab.classList.add('active');
+                }, 600); // Длительность анимации выхода
+            } else {
+                document.getElementById(tabId).classList.add('active');
+            }
         }
 
         function sendVoteToTelegram(userId, username, selectedNominees) {
@@ -945,7 +910,10 @@
 
         tg.MainButton.setText("Закрыть");
         tg.MainButton.show();
-        tg.MainButton.onClick(() => tg.close());
+        tg.MainButton.onClick(() => {
+            playSound(clickSound);
+            tg.close();
+        });
     </script>
 </body>
 </html>
