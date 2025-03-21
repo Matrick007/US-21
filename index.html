@@ -2,68 +2,65 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-
         body {
             font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #6a11cb, #2575fc);
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             text-align: center;
+            overflow: auto;
         }
 
         .container {
-            width: 100%;
-            height: 100vh;
-            padding: 10px;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 0;
+            border-radius: 15px;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            max-height: 80vh;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         h1 {
-            font-size: clamp(1.5rem, 5vw, 3rem);
-            margin: 10px 0;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            opacity: 0;
             animation: fadeIn 1s forwards 1s;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .welcome-text {
-            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-size: 1.2rem;
+            opacity: 0;
             animation: fadeIn 1s forwards 2s;
-            padding: 0 10px;
         }
 
         .button {
-            padding: 12px 24px;
+            padding: 12px 25px;
             background: #ff6f61;
             color: white;
             border: none;
             border-radius: 25px;
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: all 0.3s ease;
+            opacity: 0;
             animation: fadeIn 1s forwards 3s;
             box-shadow: 0 4px 15px rgba(255, 111, 97, 0.4);
-            touch-action: manipulation;
-            margin: 10px auto;
-            display: block;
         }
 
         .button:hover {
@@ -78,18 +75,15 @@
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-20px); }
         }
 
         .tab {
             display: none;
-            padding: 10px;
         }
 
         .tab.active {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            display: block;
         }
 
         .parallax-background {
@@ -105,9 +99,11 @@
 
         .stars {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="1" fill="white" /><circle cx="30%" cy="50%" r="0.5" fill="white" /><circle cx="70%" cy="10%" r="0.75" fill="white" /><circle cx="90%" cy="80%" r="1" fill="white" /><circle cx="50%" cy="30%" r="0.5" fill="white" /></svg>');
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="2" fill="white" /><circle cx="30%" cy="50%" r="1" fill="white" /><circle cx="70%" cy="10%" r="1.5" fill="white" /><circle cx="90%" cy="80%" r="2" fill="white" /><circle cx="50%" cy="30%" r="1" fill="white" /></svg>');
             animation: float 8s ease-in-out infinite;
         }
 
@@ -115,40 +111,41 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: 300px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
             transform: translate(-50%, -50%);
             border-radius: 50%;
-            filter: blur(30px);
+            filter: blur(50px);
             animation: glowPulse 3s ease-in-out infinite;
         }
 
         @keyframes glowPulse {
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
         }
 
         .nominees {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin: 15px 0;
+            margin-top: 20px;
         }
 
         .nominee-subblock {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .nominee {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
             padding: 10px;
-            transition: transform 0.3s ease;
+            text-align: center;
             position: relative;
-            touch-action: manipulation;
+            transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
         .nominee:hover {
@@ -157,21 +154,18 @@
 
         .nominee img {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 8px;
-            object-fit: cover;
-            aspect-ratio: 1 / 1;
         }
 
         .nominee h3 {
-            font-size: clamp(0.8rem, 2vw, 1rem);
-            margin: 0;
-            word-break: break-word;
+            font-size: 1rem;
+            margin: 5px 0;
         }
 
         .nominee.selected {
-            background: rgba(0, 255, 0, 0.2);
+            background: rgba(0, 255, 0, 0.25);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
         }
 
         .nominee-actions {
@@ -180,30 +174,50 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: none;
-            gap: 5px;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 90%;
+            flex-direction: column;
+            gap: 10px;
+            width: 80%;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 2;
         }
 
         .nominee:hover .nominee-actions {
             display: flex;
+            opacity: 1;
         }
 
         .nominee-actions button {
-            padding: 5px 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            padding: 8px 15px;
             border: none;
-            border-radius: 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
             cursor: pointer;
-            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-            flex: 1;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, #ff6f61, #ff3b2f);
+            color: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nominee-actions button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff3b2f, #ff6f61);
+        }
+
+        .nominee-actions .info-action {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .nominee-actions .info-action:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
         }
 
         .nominee-tab {
             position: relative;
-            padding-top: 50px;
         }
 
         .back-button, .info-button {
@@ -215,62 +229,57 @@
             border-radius: 50%;
             width: 35px;
             height: 35px;
-            font-size: 1rem;
+            cursor: pointer;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            touch-action: manipulation;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover, .info-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
         }
 
         .back-button { left: 10px; }
         .info-button { right: 10px; }
 
         .vote-button {
-            margin: 15px auto;
+            margin-top: 20px;
         }
 
         .nominee-info {
             display: none;
-            margin: 15px 0;
-            padding: 10px;
+            margin-top: 20px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            font-size: clamp(0.9rem, 2vw, 1rem);
+            border-radius: 15px;
+            transition: all 0.3s ease;
         }
 
         .nominee-info.active {
             display: block;
         }
 
-        .row-title {
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-            margin: 15px 0 10px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 50vh;
-            border: none;
-            border-radius: 10px;
-        }
-
         .submit-button {
-            margin: 20px auto;
+            margin-top: 20px;
             display: none;
         }
 
+        .row-title {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
         @media (max-width: 480px) {
-            .container {
-                padding: 5px;
-            }
-            
-            .nominee-subblock {
-                grid-template-columns: 1fr;
-            }
-            
-            .button {
-                padding: 10px 20px;
-            }
+            h1 { font-size: 2rem; }
+            .welcome-text { font-size: 1rem; }
+            .button { font-size: 1rem; padding: 10px 20px; }
+            .nominee h3 { font-size: 0.9rem; }
+            .nominee-actions button { font-size: 0.8rem; padding: 6px 12px; }
+            .row-title { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -315,7 +324,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="nominee-subblock">
+                <        <div class="nominee-subblock">
                     <div class="nominee" data-nominee="3" data-row="1">
                         <img src="photo/toxcik/куликов токсик.jpg" alt="Куликов Виталий">
                         <h3>Куликов Виталий</h3>
@@ -663,7 +672,7 @@
             <button class="info-button" id="infoButton">i</button>
             <h1 id="nomineeName">Литнарович Кирилл</h1>
             <div class="nominee-info" id="nomineeInfo">
-                <p id="nomineeInfoText">Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21. Всегда готов подколоть и пошутить, но делает это с любовью.</p>
+                <p id="nomineeInfoText">Информация о номинанте: Литнарович Кирилл — самый токсичный человек в группе ИС-21.</p>
             </div>
             <button class="button vote-button" id="voteButton">Голосовать</button>
         </div>
@@ -675,7 +684,6 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-
         const tabs = document.querySelectorAll('.tab');
         const nextButton = document.getElementById('nextButton');
         const nextButton2 = document.getElementById('nextButton2');
@@ -753,12 +761,8 @@
             const nomineeName = document.getElementById('nomineeName').textContent;
             const userId = tg.initDataUnsafe.user?.id || 'Аноним';
             const username = tg.initDataUnsafe.user?.username || 'Аноним';
-
             sendVoteToTelegram(userId, username, nomineeName);
-
-            setTimeout(() => {
-                switchTab('tab5');
-            }, 2000);
+            setTimeout(() => switchTab('tab5'), 2000);
         });
 
         const nominees = document.querySelectorAll('.nominee');
@@ -766,21 +770,34 @@
             const voteAction = nominee.querySelector('.vote-action');
             const infoAction = nominee.querySelector('.info-action');
 
+            nominee.addEventListener('touchstart', () => {
+                nominee.querySelector('.nominee-actions').style.display = 'flex';
+                setTimeout(() => {
+                    nominee.querySelector('.nominee-actions').style.opacity = '1';
+                }, 10);
+            });
+
+            nominee.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    nominee.querySelector('.nominee-actions').style.opacity = '0';
+                    setTimeout(() => {
+                        nominee.querySelector('.nominee-actions').style.display = 'none';
+                    }, 200);
+                }, 2000);
+            });
+
             voteAction.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const row = nominee.getAttribute('data-row');
                 const nomineeId = nominee.getAttribute('data-nominee');
                 selectedNominees[row] = nomineeId;
-
                 nominee.classList.add('selected');
-
                 document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
                     if (n !== nominee) {
                         n.style.pointerEvents = 'none';
                         n.style.opacity = '0.5';
                     }
                 });
-
                 checkAllVotes();
             });
 
@@ -804,14 +821,9 @@
         submitVotes.addEventListener('click', () => {
             const userId = tg.initDataUnsafe.user?.id || 'Аноним';
             const username = tg.initDataUnsafe.user?.username || 'Аноним';
-
             sendVoteToTelegram(userId, username, selectedNominees);
-
             switchTab('tab5');
-
-            setTimeout(() => {
-                tg.close();
-            }, 3000);
+            setTimeout(() => tg.close(), 3000);
         });
 
         infoButton.addEventListener('click', () => {
@@ -826,34 +838,21 @@
         function sendVoteToTelegram(userId, username, selectedNominees) {
             const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
             const chatId = '-4643837010';
-            const message = typeof selectedNominees === 'string' 
-                ? `Пользователь ${username} (ID: ${userId}) проголосовал за: ${selectedNominees}`
-                : `Пользователь ${username} (ID: ${userId}) проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `Строка ${row}: ${nominee}`).join('\n')}`;
+            const message = `Пользователь ${username} (ID: ${userId}) проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `Строка ${row}: ${nominee}`).join('\n')}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
             })
             .then(response => response.json())
-            .then(data => {
-                console.log('Сообщение отправлено:', data);
-            })
-            .catch(error => {
-                console.error('Ошибка при отправке сообщения:', error);
-            });
+            .then(data => console.log('Сообщение отправлено:', data))
+            .catch(error => console.error('Ошибка:', error));
         }
 
         tg.MainButton.setText("Закрыть");
         tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            tg.close();
-        });
+        tg.MainButton.onClick(() => tg.close());
     </script>
 </body>
 </html>
