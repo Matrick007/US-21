@@ -6,76 +6,157 @@
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #0d0d1b;
+            color: #fff;
             min-height: 100vh;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: auto;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d0d1b, #1e1e3f);
+            z-index: -2;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="5%" cy="15%" r="2" fill="#516fff" /><circle cx="25%" cy="45%" r="1.5" fill="#ff6f91" /><circle cx="65%" cy="20%" r="2" fill="#00c4cc" /><circle cx="85%" cy="75%" r="1" fill="#516fff" /><circle cx="45%" cy="35%" r="1.5" fill="#ff6f91" /></svg>');
+            animation: particleFloat 15s ease-in-out infinite;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(81, 111, 255, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: glowPulse 3s ease-in-out infinite;
+            z-index: -1;
         }
 
         .container {
             width: 90%;
-            max-width: 600px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            max-width: 750px;
+            padding: 30px;
+            background: rgba(20, 20, 40, 0.9);
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(81, 111, 255, 0.2);
             position: relative;
             z-index: 1;
-            max-height: 80vh;
+            max-height: 90vh;
             overflow-y: auto;
+            border: 2px solid rgba(81, 111, 255, 0.5);
+            transform: rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .container:hover {
+            transform: rotateX(0deg);
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 25px;
             opacity: 0;
-            animation: fadeIn 1s forwards 1s;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s forwards 0.5s;
+            background: linear-gradient(90deg, #516fff, #ff6f91, #00c4cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(81, 111, 255, 0.8), 0 0 40px rgba(255, 111, 145, 0.6);
+            letter-spacing: 2px;
         }
 
         .welcome-text {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            font-weight: 400;
             opacity: 0;
-            animation: fadeIn 1s forwards 2s;
+            animation: fadeIn 1s forwards 1s;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
         }
 
         .button {
-            padding: 12px 25px;
-            background: #ff6f61;
+            padding: 15px 35px;
+            background: linear-gradient(45deg, #516fff, #ff6f91);
             color: white;
             border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             opacity: 0;
-            animation: fadeIn 1s forwards 3s;
-            box-shadow: 0 4px 15px rgba(255, 111, 97, 0.4);
+            animation: fadeIn 1s forwards 1.5s;
+            box-shadow: 0 10px 30px rgba(81, 111, 255, 0.6), 0 0 20px rgba(255, 111, 145, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .button:hover {
-            background: #ff3b2f;
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(81, 111, 255, 0.8), 0 0 30px rgba(255, 111, 145, 0.6);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-50px) scale(1.1); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.5; }
         }
 
         .tab {
@@ -86,86 +167,64 @@
             display: block;
         }
 
-        .parallax-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="2" fill="white" /><circle cx="30%" cy="50%" r="1" fill="white" /><circle cx="70%" cy="10%" r="1.5" fill="white" /><circle cx="90%" cy="80%" r="2" fill="white" /><circle cx="50%" cy="30%" r="1" fill="white" /></svg>');
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            filter: blur(50px);
-            animation: glowPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.2); }
-        }
-
         .nominees {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .nominee-subblock {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 25px;
         }
 
         .nominee {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 10px;
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
             position: relative;
-            transition: transform 0.3s ease;
+            transition: all 0.4s ease;
             cursor: pointer;
+            overflow: hidden;
+            border: 1px solid rgba(81, 111, 255, 0.3);
+            transform: rotateX(10deg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .nominee:hover {
-            transform: scale(1.03);
+            transform: rotateX(0deg) translateY(-10px);
+            box-shadow: 0 20px 50px rgba(81, 111, 255, 0.5), 0 0 30px rgba(255, 111, 145, 0.3);
+            border: 1px solid rgba(81, 111, 255, 0.8);
         }
 
         .nominee img {
             width: 100%;
-            border-radius: 10px;
-            margin-bottom: 8px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            transition: transform 0.4s ease;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        .nominee:hover img {
+            transform: scale(1.1);
         }
 
         .nominee h3 {
-            font-size: 1rem;
-            margin: 5px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
         }
 
         .nominee.selected {
-            background: rgba(0, 255, 0, 0.25);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            background: rgba(81, 111, 255, 0.3);
+            border: 2px solid #516fff;
+            box-shadow: 0 0 30px rgba(81, 111, 255, 0.8), inset 0 0 20px rgba(81, 111, 255, 0.4);
+            transform: rotateX(0deg);
         }
 
         .nominee-actions {
@@ -175,10 +234,10 @@
             transform: translate(-50%, -50%);
             display: none;
             flex-direction: column;
-            gap: 10px;
-            width: 80%;
+            gap: 15px;
+            width: 90%;
             opacity: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.3s ease;
             z-index: 2;
         }
 
@@ -188,32 +247,51 @@
         }
 
         .nominee-actions button {
-            padding: 8px 15px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            background: linear-gradient(45deg, #ff6f61, #ff3b2f);
-            color: white;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1.5px;
+            color: #fff;
+            background: linear-gradient(45deg, #ff6f91, #516fff);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nominee-actions button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .nominee-actions button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .nominee-actions button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #ff3b2f, #ff6f61);
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(81, 111, 255, 0.6);
         }
 
         .nominee-actions .info-action {
-            background: linear-gradient(45deg, #3498db, #2980b9);
+            background: linear-gradient(45deg, #00c4cc, #516fff);
         }
 
         .nominee-actions .info-action:hover {
-            background: linear-gradient(45deg, #2980b9, #3498db);
+            background: linear-gradient(45deg, #516fff, #00c4cc);
         }
 
         .nominee-tab {
@@ -222,40 +300,48 @@
 
         .back-button, .info-button {
             position: absolute;
-            top: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            top: 20px;
+            background: rgba(81, 111, 255, 0.2);
+            color: #fff;
             border: none;
             border-radius: 50%;
-            width: 35px;
-            height: 35px;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         .back-button:hover, .info-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+            background: rgba(81, 111, 255, 0.5);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 15px 30px rgba(81, 111, 255, 0.6);
         }
 
-        .back-button { left: 10px; }
-        .info-button { right: 10px; }
+        .back-button { left: 20px; }
+        .info-button { right: 20px; }
 
         .vote-button {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .nominee-info {
             display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            transition: all 0.3s ease;
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.6;
+            border: 1px solid rgba(81, 111, 255, 0.3);
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
         }
 
         .nominee-info.active {
@@ -263,31 +349,38 @@
         }
 
         .submit-button {
-            margin-top: 20px;
+            margin-top: 35px;
             display: none;
         }
 
         .row-title {
-            font-size: 1.4rem;
-            margin: 20px 0 10px;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 35px 0 20px;
+            background: linear-gradient(90deg, #ff6f91, #516fff, #00c4cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(81, 111, 255, 0.8), 0 0 40px rgba(255, 111, 145, 0.6);
+            letter-spacing: 2px;
         }
 
         @media (max-width: 480px) {
-            h1 { font-size: 2rem; }
-            .welcome-text { font-size: 1rem; }
-            .button { font-size: 1rem; padding: 10px 20px; }
-            .nominee h3 { font-size: 0.9rem; }
-            .nominee-actions button { font-size: 0.8rem; padding: 6px 12px; }
-            .row-title { font-size: 1.2rem; }
+            h1 { font-size: 2.5rem; }
+            .welcome-text { font-size: 1.2rem; }
+            .button { font-size: 1.1rem; padding: 12px 25px; }
+            .nominee h3 { font-size: 1rem; }
+            .nominee-actions button { font-size: 0.9rem; padding: 10px 20px; }
+            .row-title { font-size: 1.7rem; }
+            .container { padding: 20px; }
+            .glow-effect { width: 300px; height: 300px; }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="parallax-background">
-        <div class="stars"></div>
-        <div class="glow"></div>
-    </div>
+    <div class="background"></div>
+    <div class="particles"></div>
+    <div class="glow-effect"></div>
 
     <div class="container">
         <div id="tab1" class="tab active">
@@ -297,7 +390,7 @@
         </div>
 
         <div id="tab2" class="tab">
-            <iframe src="video/toxcik/Заходя в комнату поздоровайся с котом.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay></iframe>
+            <iframe src="video/toxcik/Заходя в комнату поздоровайся с котом.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen autoplay style="width: 100%; height: 350px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);"></iframe>
             <button class="button" id="nextButton2">Голосовать</button>
         </div>
 
@@ -324,7 +417,7 @@
                         </div>
                     </div>
                 </div>
-                <        <div class="nominee-subblock">
+                <div class="nominee-subblock">
                     <div class="nominee" data-nominee="3" data-row="1">
                         <img src="photo/toxcik/куликов токсик.jpg" alt="Куликов Виталий">
                         <h3>Куликов Виталий</h3>
@@ -782,7 +875,7 @@
                     nominee.querySelector('.nominee-actions').style.opacity = '0';
                     setTimeout(() => {
                         nominee.querySelector('.nominee-actions').style.display = 'none';
-                    }, 200);
+                    }, 300);
                 }, 2000);
             });
 
