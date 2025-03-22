@@ -6,364 +6,341 @@
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-user-select: none;
-            user-select: none;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-user-select: none;
+        user-select: none;
+    }
 
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background: #0a0a23;
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-            perspective: 1200px;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
+    body {
+        font-family: 'Orbitron', sans-serif;
+        background: #0a0a23;
+        color: #fff;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
 
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
+    .background {
+        position: fixed;
+        top: -10%;
+        left: -10%;
+        width: 120%;
+        height: 120%;
+        background: radial-gradient(circle at center, #1e1e3f 0%, #0a0a23 70%);
+        z-index: -3;
+        animation: backgroundPulse 15s infinite ease-in-out, rotateBackground 30s linear infinite;
+    }
+
+    .particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="3" fill="#6b48ff" opacity="0.8"><animate attributeName="r" values="3;5;3" dur="4s" repeatCount="indefinite"/></circle><circle cx="30%" cy="50%" r="2" fill="#ff2e63" opacity="0.7"><animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"/></circle><circle cx="70%" cy="30%" r="2.5" fill="#00d4ff" opacity="0.9"><animate attributeName="r" values="2.5;4.5;2.5" dur="5s" repeatCount="indefinite"/></circle><circle cx="90%" cy="80%" r="1.5" fill="#6b48ff" opacity="0.6"><animate attributeName="r" values="1.5;3;1.5" dur="3.5s" repeatCount="indefinite"/></circle><circle cx="50%" cy="40%" r="2" fill="#ff2e63" opacity="0.8"><animate attributeName="r" values="2;3.5;2" dur="4.5s" repeatCount="indefinite"/></circle></svg>');
+        animation: particleDrift 20s infinite ease-in-out, particleFade 5s infinite;
+        z-index: -2;
+        mix-blend-mode: screen;
+    }
+
+    .glow-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(circle, rgba(107, 72, 255, 0.5), transparent 70%);
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        filter: blur(150px);
+        animation: glowEpic 6s infinite ease-in-out, rotateGlow 12s linear infinite;
+        z-index: -1;
+    }
+
+    .container {
+        width: 95%;
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 25px;
+        background: rgba(15, 15, 35, 0.95);
+        border-radius: 30px;
+        backdrop-filter: blur(25px);
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7), inset 0 0 25px rgba(107, 72, 255, 0.3);
+        position: relative;
+        z-index: 1;
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 3px solid rgba(107, 72, 255, 0.7);
+        animation: containerEntrance 1.5s ease-out;
+    }
+
+    h1 {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 30px;
+        background: linear-gradient(90deg, #6b48ff, #ff2e63, #00d4ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 30px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.7);
+        animation: textGlow 3s infinite alternate, floatText 4s infinite ease-in-out;
+    }
+
+    .welcome-text {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
+        animation: fadeInUp 1.5s ease-out;
+    }
+
+    .button {
+        padding: 18px 40px;
+        background: linear-gradient(45deg, #6b48ff, #ff2e63, #00d4ff);
+        color: #fff;
+        border: none;
+        border-radius: 60px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7);
+        position: relative;
+        overflow: hidden;
+        animation: buttonPulse 2s infinite;
+    }
+
+    .button:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9);
+    }
+
+    .tab {
+        display: none;
+    }
+
+    .tab.active {
+        display: block;
+        animation: tabTransitionIn 0.8s ease-out forwards;
+    }
+
+    .nominees {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 35px;
+    }
+
+    .nominee-subblock {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .nominee {
+        background: rgba(25, 25, 50, 0.9);
+        border-radius: 25px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.5s ease;
+        cursor: pointer;
+        border: 2px solid rgba(107, 72, 255, 0.5);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        animation: nomineeFloat 3s infinite ease-in-out;
+    }
+
+    .nominee:hover,
+    .nominee.active {
+        transform: scale(1.05) translateY(-10px);
+        box-shadow: 0 25px 60px rgba(107, 72, 255, 0.7);
+        border-color: rgba(107, 72, 255, 1);
+    }
+
+    .nominee img {
+        width: 100%;
+        border-radius: 20px;
+        margin-bottom: 15px;
+        transition: transform 0.5s ease;
+    }
+
+    .nominee h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
+        overflow: visible;
+        white-space: normal;
+        line-height: 1.3;
+        padding: 0 10px;
+    }
+
+    .nominee-actions {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        width: 90%;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 2;
+    }
+
+    .nominee.active .nominee-actions {
+        display: flex;
+        opacity: 1;
+        animation: actionFadeIn 0.5s ease-out;
+    }
+
+    .vote-action {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(45deg, #ff2e63, #6b48ff, #00d4ff);
+        box-shadow: 0 10px 25px rgba(107, 72, 255, 0.7);
+        transition: all 0.3s ease;
+        white-space: normal;
+        word-wrap: break-word;
+        animation: votePulse 2s infinite;
+    }
+
+    .vote-action:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 35px rgba(107, 72, 255, 0.9);
+    }
+
+    .row-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 40px 0 25px;
+        background: linear-gradient(90deg, #ff2e63, #6b48ff, #00d4ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 25px rgba(107, 72, 255, 0.9);
+    }
+
+    .submit-button {
+        margin-top: 40px;
+        display: none;
+    }
+
+    @keyframes containerEntrance {
+        0% { transform: scale(0.8) translateY(100px); opacity: 0; }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    @keyframes textGlow {
+        0% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.7); }
+        50% { text-shadow: 0 0 40px rgba(107, 72, 255, 1), 0 0 80px rgba(255, 46, 99, 0.9); }
+        100% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.7); }
+    }
+
+    @keyframes floatText {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+        100% { transform: translateY(0); }
+    }
+
+    @keyframes particleDrift {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(-40px, -60px) rotate(20deg); }
+        50% { transform: translate(30px, -30px) rotate(-15deg); }
+        75% { transform: translate(-20px, 40px) rotate(10deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes particleFade {
+        0% { opacity: 0.85; }
+        50% { opacity: 1; }
+        100% { opacity: 0.85; }
+    }
+
+    @keyframes glowEpic {
+        0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+        50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
+        100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    }
+
+    @keyframes rotateGlow {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes rotateBackground {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes buttonPulse {
+        0% { box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7); }
+        50% { box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9); }
+        100% { box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7); }
+    }
+
+    @keyframes votePulse {
+        0% { box-shadow: 0 10px 25px rgba(107, 72, 255, 0.7); }
+        50% { box-shadow: 0 15px 35px rgba(107, 72, 255, 0.9); }
+        100% { box-shadow: 0 10px 25px rgba(107, 72, 255, 0.7); }
+    }
+
+    @keyframes nomineeFloat {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+    }
+
+    @keyframes actionFadeIn {
+        0% { opacity: 0; transform: translate(-50%, -40%); }
+        100% { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    @keyframes tabTransitionIn {
+        0% { opacity: 0; transform: scale(1.15) rotateX(-25deg); filter: blur(15px); }
+        100% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
+    }
+
+    @media (max-width: 480px) {
+        h1 { font-size: 2.5rem; }
+        .welcome-text { font-size: 1.2rem; }
+        .button { 
+            font-size: 1.1rem; 
+            padding: 14px 25px; 
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #1e1e3f 0%, #0a0a23 70%);
-            z-index: -3;
-            animation: backgroundPulse 20s infinite ease-in-out;
         }
-
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="3" fill="#6b48ff" opacity="0.8"/><circle cx="30%" cy="50%" r="2" fill="#ff2e63" opacity="0.7"/><circle cx="70%" cy="30%" r="2.5" fill="#00d4ff" opacity="0.9"/><circle cx="90%" cy="80%" r="1.5" fill="#6b48ff" opacity="0.6"/><circle cx="50%" cy="40%" r="2" fill="#ff2e63" opacity="0.8"/></svg>');
-            animation: particleDrift 25s infinite ease-in-out;
-            z-index: -2;
-            opacity: 0.85;
-            mix-blend-mode: screen;
-        }
-
-        .glow-effect {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(107, 72, 255, 0.4), transparent 70%);
-            transform: translate(-50%, -50%) rotate(45deg);
-            border-radius: 50%;
-            filter: blur(120px);
-            animation: glowEpic 4s infinite ease-in-out;
-            z-index: -1;
-        }
-
-        .container {
-            width: 95%;
-            max-width: 800px;
-            padding: 25px;
-            background: rgba(15, 15, 35, 0.92);
-            border-radius: 30px;
-            backdrop-filter: blur(25px);
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(107, 72, 255, 0.25);
-            position: relative;
-            z-index: 1;
-            max-height: 92vh;
-            overflow-y: auto;
-            border: 3px solid rgba(107, 72, 255, 0.6);
-            transform: rotateX(8deg) scale(0.98);
-            transition: transform 0.6s ease, box-shadow 0.6s ease;
-        }
-
-        .container:hover {
-            transform: rotateX(0deg) scale(1);
-            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(107, 72, 255, 0.4);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: epicFadeIn 1.2s forwards 0.6s;
-            background: linear-gradient(90deg, #6b48ff, #ff2e63, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(107, 72, 255, 0.9), 0 0 50px rgba(255, 46, 99, 0.7), 0 0 75px rgba(0, 212, 255, 0.5);
-            letter-spacing: 3px;
-            transform: translateZ(20px);
-        }
-
-        .welcome-text {
-            font-size: 1.5rem;
-            font-weight: 500;
-            opacity: 0;
-            animation: epicFadeIn 1.2s forwards 1.2s;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 0 15px rgba(107, 72, 255, 0.6), 0 0 30px rgba(255, 46, 99, 0.4);
-            line-height: 1.6;
-        }
-
-        .button {
-            padding: 18px 40px;
-            background: linear-gradient(45deg, #6b48ff, #ff2e63, #00d4ff);
-            color: #fff;
-            border: none;
-            border-radius: 60px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.5s ease;
-            opacity: 0;
-            animation: epicFadeIn 1.2s forwards 1.8s;
-            box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7), 0 0 25px rgba(255, 46, 99, 0.5);
-            position: relative;
-            overflow: hidden;
-            transform: translateZ(10px);
-        }
-
-        .button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.25);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.7s ease, height 0.7s ease;
-        }
-
-        .button:hover::before,
-        .button:active::before {
-            width: 350px;
-            height: 350px;
-        }
-
-        .button:hover,
-        .button:active {
-            transform: scale(1.08) translateY(-8px) translateZ(15px);
-            box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9), 0 0 35px rgba(255, 46, 99, 0.7);
-        }
-
-        @keyframes epicFadeIn {
-            0% { opacity: 0; transform: translateY(40px) scale(0.9); filter: blur(5px); }
-            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-        }
-
-        @keyframes particleDrift {
-            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.85; }
-            25% { transform: translate(-30px, -50px) rotate(15deg) scale(1.15); opacity: 1; }
-            50% { transform: translate(20px, -20px) rotate(-10deg) scale(1.1); opacity: 0.9; }
-            75% { transform: translate(-10px, 30px) rotate(5deg) scale(1.05); opacity: 0.95; }
-        }
-
-        @keyframes glowEpic {
-            0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(45deg); opacity: 0.4; filter: blur(120px); }
-            50% { transform: translate(-50%, -50%) scale(1.4) rotate(55deg); opacity: 0.6; filter: blur(140px); }
-        }
-
-        @keyframes backgroundPulse {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .tab {
-            display: none;
-            animation: tabTransitionIn 0.8s ease-out forwards;
-        }
-
-        .tab.active { display: block; }
-        .tab.exiting { animation: tabTransitionOut 0.8s ease-in forwards; }
-
-        @keyframes tabTransitionOut {
-            0% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
-            100% { opacity: 0; transform: scale(0.85) rotateX(25deg); filter: blur(15px); }
-        }
-
-        @keyframes tabTransitionIn {
-            0% { opacity: 0; transform: scale(1.15) rotateX(-25deg); filter: blur(15px); }
-            100% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
-        }
-
-        .nominees {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin-top: 35px;
-        }
-
-        .nominee-subblock {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-
         .nominee {
-            background: rgba(25, 25, 50, 0.85);
-            border-radius: 25px;
-            padding: 25px;
-            text-align: center;
-            position: relative;
-            transition: all 0.5s ease;
-            cursor: pointer;
-            overflow: hidden;
-            border: 2px solid rgba(107, 72, 255, 0.4);
-            transform: rotateX(12deg) scale(0.95);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            padding: 15px;
         }
-
-        .nominee:hover,
-        .nominee.active {
-            transform: rotateX(0deg) scale(1) translateY(-12px);
-            box-shadow: 0 25px 60px rgba(107, 72, 255, 0.6), 0 0 40px rgba(255, 46, 99, 0.4);
-            border: 2px solid rgba(107, 72, 255, 0.9);
-        }
-
-        .nominee img {
-            width: 100%;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            transition: transform 0.5s ease;
-            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
-        }
-
-        .nominee:hover img,
-        .nominee.active img {
-            transform: scale(1.15) translateZ(10px);
-        }
-
         .nominee h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin: 0;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 1rem;
+            line-height: 1.4;
+            min-height: 40px;
         }
-
-        .nominee.selected {
-            background: rgba(107, 72, 255, 0.35);
-            border: 3px solid #6b48ff;
-            box-shadow: 0 0 40px rgba(107, 72, 255, 0.9), inset 0 0 25px rgba(107, 72, 255, 0.5);
-            transform: rotateX(0deg) scale(1);
-        }
-
-        .nominee-actions {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            width: 90%;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 2;
-        }
-
-        .nominee.active .nominee-actions {
-            display: flex;
-            opacity: 1;
-        }
-
         .vote-action {
-            padding: 16px 32px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.5s ease;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            color: #fff;
-            background: linear-gradient(45deg, #ff2e63, #6b48ff, #00d4ff);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(107, 72, 255, 0.7);
-            position: relative;
-            overflow: hidden;
-            animation: pulseEpic 2.5s infinite;
-            white-space: nowrap;
+            font-size: 0.9rem;
+            padding: 10px 15px;
+            width: 100%;
         }
-
-        .vote-action::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.35);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.7s ease, height 0.7s ease;
+        .nominee-subblock {
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
-
-        .vote-action:hover::before,
-        .vote-action:active::before {
-            width: 450px;
-            height: 450px;
+        .container {
+            margin: 10px;
+            padding: 15px;
         }
-
-        .vote-action:hover,
-        .vote-action:active {
-            transform: scale(1.12) translateY(-6px);
-            box-shadow: 0 25px 50px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.8);
-            background: linear-gradient(45deg, #00d4ff, #ff2e63, #6b48ff);
-        }
-
-        @keyframes pulseEpic {
-            0% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(107, 72, 255, 0.7); }
-            50% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 50px rgba(107, 72, 255, 0.9); }
-            100% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(107, 72, 255, 0.7); }
-        }
-
         .row-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin: 40px 0 25px;
-            background: linear-gradient(90deg, #ff2e63, #6b48ff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(107, 72, 255, 0.9), 0 0 50px rgba(255, 46, 99, 0.7);
-            letter-spacing: 3px;
-            animation: epicFadeIn 1s forwards;
+            font-size: 1.8rem;
         }
-
-        .submit-button {
-            margin-top: 40px;
-            display: none;
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 2.8rem; }
-            .welcome-text { font-size: 1.3rem; }
-            .button { font-size: 1.2rem; padding: 14px 30px; }
-            .vote-action { 
-                font-size: 1.1rem; 
-                padding: 14px 28px; 
-                letter-spacing: 1.5px;
-            }
-            .nominee h3 { font-size: 1.1rem; }
-            .row-title { font-size: 1.9rem; }
-            .container { padding: 20px; }
-            .glow-effect { width: 400px; height: 400px; }
-            .nominee-subblock { gap: 20px; }
-            .nominee { padding: 20px; }
-        }
+    }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
@@ -384,8 +361,8 @@
 
     <div class="container">
         <div id="tab1" class="tab active">
-            <h1 id="welcomeText">Добро пожаловать!</h1>
-            <p class="welcome-text">Мы рады видеть вас здесь!</p>
+            <h1 id="welcomeText"><center>Добро пожаловать!</center></h1>
+            <p class="welcome-text"><center>Мы рады видеть вас здесь!</center></p>
             <button class="button" id="nextButton">Начать</button>
         </div>
 
@@ -400,14 +377,14 @@
             <div class="row-title">Токсик года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="1" data-row="1">
+                    <div class="nominee" data-nominee="Кирилл" data-row="Токсик">
                         <img src="photo/toxcik/литнарович.png" alt="Литнарович Кирилл">
                         <h3>Литнарович Кирилл</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="2" data-row="1">
+                    <div class="nominee" data-nominee="Полякова" data-row="Токсик">
                         <img src="photo/toxcik/катюха токсик.jpg" alt="Полякова Екатерина">
                         <h3>Полякова Екатерина</h3>
                         <div class="nominee-actions">
@@ -416,14 +393,14 @@
                     </div>
                 </div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="3" data-row="1">
+                    <div class="nominee" data-nominee="Куликов" data-row="Токсик">
                         <img src="photo/toxcik/куликов токсик.jpg" alt="Куликов Виталий">
                         <h3>Куликов Виталий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="4" data-row="1">
+                    <div class="nominee" data-nominee="Жданов" data-row="Токсик">
                         <img src="photo/toxcik/жданов токсик.jpg" alt="Жданов Сергей">
                         <h3>Жданов Сергей</h3>
                         <div class="nominee-actions">
@@ -436,14 +413,14 @@
             <div class="row-title">Оператор года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="5" data-row="2">
+                    <div class="nominee" data-nominee="Лукин" data-row="Оператор">
                         <img src="photo/operator/лукин.png" alt="Лукин Александр">
                         <h3>Лукин Александр</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="6" data-row="2">
+                    <div class="nominee" data-nominee="Галкин" data-row="Оператор">
                         <img src="photo/operator/galkin.png" alt="Галкин Виталий">
                         <h3>Галкин Виталий</h3>
                         <div class="nominee-actions">
@@ -452,14 +429,14 @@
                     </div>
                 </div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="7" data-row="2">
+                    <div class="nominee" data-nominee="Литнарович" data-row="Оператор">
                         <img src="photo/operator/litnarovich.png" alt="Литнарович Кирилл">
                         <h3>Литнарович Кирилл</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="8" data-row="2">
+                    <div class="nominee" data-nominee="Туленков" data-row="Оператор">
                         <img src="photo/operator/туленков.png" alt="Туленков Андрей">
                         <h3>Туленков Андрей</h3>
                         <div class="nominee-actions">
@@ -472,14 +449,14 @@
             <div class="row-title">Пара Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="9" data-row="3">
+                    <div class="nominee" data-nominee="дима" data-row="Пара">
                         <img src="photo/para/дима.jpg" alt="Дмитрий и Алина">
                         <h3>Дмитрий и Алина</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="10" data-row="3">
+                    <div class="nominee" data-nominee="куликов" data-row="Пара">
                         <img src="photo/para/куликов.jpg" alt="Виталик и Полина">
                         <h3>Виталик и Полина</h3>
                         <div class="nominee-actions">
@@ -488,14 +465,14 @@
                     </div>
                 </div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="11" data-row="3">
+                    <div class="nominee" data-nominee="рита" data-row="Пара">
                         <img src="photo/para/рита.jpg" alt="Рита и Арсений">
                         <h3>Рита и Арсений</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="12" data-row="3">
+                    <div class="nominee" data-nominee="эльчин" data-row="Пара">
                         <img src="photo/para/эльчин.jpg" alt="Эльчин и Кира">
                         <h3>Эльчин и Кира</h3>
                         <div class="nominee-actions">
@@ -508,32 +485,32 @@
             <div class="row-title">Воздухан Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="13" data-row="4">
-                        <img src="photo/air/воздухан1.jpg" alt="Петров Иван">
-                        <h3>Петров Иван</h3>
+                    <div class="nominee" data-nominee="Галкин" data-row="Воздухан">
+                        <img src="photo/vozdyxan/галкин.jpg" alt="Галкин Виталий">
+                        <h3>Галкин Виталий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="14" data-row="4">
-                        <img src="photo/air/воздухан2.jpg" alt="Сидоров Алексей">
-                        <h3>Сидоров Алексей</h3>
+                    <div class="nominee" data-nominee="Караев" data-row="Воздухан">
+                        <img src="photo/vozdyxan/эльчин.jpg" alt="Караев Эльчин">
+                        <h3>Караев Эльчин</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
                 </div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="15" data-row="4">
-                        <img src="photo/air/воздухан3.jpg" alt="Козлов Дмитрий">
-                        <h3>Козлов Дмитрий</h3>
+                    <div class="nominee" data-nominee="Куликов" data-row="Воздухан">
+                        <img src="photo/vozdyxan/куликов.jpg" alt="Куликов Виталий">
+                        <h3>Куликов Виталий</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="16" data-row="4">
-                        <img src="photo/air/воздухан4.jpg" alt="Васильев Сергей">
-                        <h3>Васильев Сергей</h3>
+                    <div class="nominee" data-nominee="Литнарович" data-row="Воздухан">
+                        <img src="photo/vozdyxan/литнарович.jpg" alt="Литнарович Кирилл">
+                        <h3>Литнарович Кирилл</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
@@ -544,14 +521,14 @@
             <div class="row-title">Самый Спокойный Года</div>
             <div class="nominees">
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="17" data-row="5">
+                    <div class="nominee" data-nominee="17" data-row="Спокойный">
                         <img src="photo/calm/спокойный1.jpg" alt="Иванов Михаил">
                         <h3>Иванов Михаил</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="18" data-row="5">
+                    <div class="nominee" data-nominee="18" data-row="Спокойный">
                         <img src="photo/calm/спокойный2.jpg" alt="Петров Николай">
                         <h3>Петров Николай</h3>
                         <div class="nominee-actions">
@@ -560,14 +537,14 @@
                     </div>
                 </div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="19" data-row="5">
+                    <div class="nominee" data-nominee="19" data-row="Спокойный">
                         <img src="photo/calm/спокойный3.jpg" alt="Сидоров Олег">
                         <h3>Сидоров Олег</h3>
                         <div class="nominee-actions">
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="20" data-row="5">
+                    <div class="nominee" data-nominee="20" data-row="Спокойный">
                         <img src="photo/calm/спокойный4.jpg" alt="Козлов Павел">
                         <h3>Козлов Павел</h3>
                         <div class="nominee-actions">
