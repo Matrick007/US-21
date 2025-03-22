@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -10,20 +10,23 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
             font-family: 'Orbitron', sans-serif;
-            background: #0d0d1b;
+            background: #0a0a23;
             color: #fff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: auto;
+            overflow: hidden;
             position: relative;
-            perspective: 1000px;
-            -webkit-tap-highlight-color: transparent; /* Убирает подсветку при тапе на мобильных */
+            perspective: 1200px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .background {
@@ -32,8 +35,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0d0d1b, #1e1e3f);
-            z-index: -2;
+            background: radial-gradient(circle at center, #1e1e3f 0%, #0a0a23 70%);
+            z-index: -3;
+            animation: backgroundPulse 20s infinite ease-in-out;
         }
 
         .particles {
@@ -42,85 +46,89 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="5%" cy="15%" r="2" fill="#516fff" /><circle cx="25%" cy="45%" r="1.5" fill="#ff6f91" /><circle cx="65%" cy="20%" r="2" fill="#00c4cc" /><circle cx="85%" cy="75%" r="1" fill="#516fff" /><circle cx="45%" cy="35%" r="1.5" fill="#ff6f91" /></svg>');
-            animation: particleFloat 15s ease-in-out infinite;
-            z-index: -1;
-            opacity: 0.7;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="3" fill="#6b48ff" opacity="0.8"/><circle cx="30%" cy="50%" r="2" fill="#ff2e63" opacity="0.7"/><circle cx="70%" cy="30%" r="2.5" fill="#00d4ff" opacity="0.9"/><circle cx="90%" cy="80%" r="1.5" fill="#6b48ff" opacity="0.6"/><circle cx="50%" cy="40%" r="2" fill="#ff2e63" opacity="0.8"/></svg>');
+            animation: particleDrift 25s infinite ease-in-out;
+            z-index: -2;
+            opacity: 0.85;
+            mix-blend-mode: screen;
         }
 
         .glow-effect {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(81, 111, 255, 0.3), transparent);
-            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(107, 72, 255, 0.4), transparent 70%);
+            transform: translate(-50%, -50%) rotate(45deg);
             border-radius: 50%;
-            filter: blur(100px);
-            animation: glowPulse 3s ease-in-out infinite;
+            filter: blur(120px);
+            animation: glowEpic 4s infinite ease-in-out;
             z-index: -1;
         }
 
         .container {
-            width: 90%;
-            max-width: 750px;
-            padding: 30px;
-            background: rgba(20, 20, 40, 0.9);
-            border-radius: 25px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(81, 111, 255, 0.2);
+            width: 95%;
+            max-width: 800px;
+            padding: 25px;
+            background: rgba(15, 15, 35, 0.92);
+            border-radius: 30px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(107, 72, 255, 0.25);
             position: relative;
             z-index: 1;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
-            border: 2px solid rgba(81, 111, 255, 0.5);
-            transform: rotateX(5deg);
-            transition: transform 0.5s ease;
+            border: 3px solid rgba(107, 72, 255, 0.6);
+            transform: rotateX(8deg) scale(0.98);
+            transition: transform 0.6s ease, box-shadow 0.6s ease;
         }
 
         .container:hover {
-            transform: rotateX(0deg);
+            transform: rotateX(0deg) scale(1);
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(107, 72, 255, 0.4);
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 900;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             opacity: 0;
-            animation: fadeIn 1s forwards 0.5s;
-            background: linear-gradient(90deg, #516fff, #ff6f91, #00c4cc);
+            animation: epicFadeIn 1.2s forwards 0.6s;
+            background: linear-gradient(90deg, #6b48ff, #ff2e63, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(81, 111, 255, 0.8), 0 0 40px rgba(255, 111, 145, 0.6);
-            letter-spacing: 2px;
+            text-shadow: 0 0 25px rgba(107, 72, 255, 0.9), 0 0 50px rgba(255, 46, 99, 0.7), 0 0 75px rgba(0, 212, 255, 0.5);
+            letter-spacing: 3px;
+            transform: translateZ(20px);
         }
 
         .welcome-text {
-            font-size: 1.4rem;
-            font-weight: 400;
+            font-size: 1.5rem;
+            font-weight: 500;
             opacity: 0;
-            animation: fadeIn 1s forwards 1s;
-            color: rgba(255, 255, 255, 0.85);
-            text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
+            animation: epicFadeIn 1.2s forwards 1.2s;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 15px rgba(107, 72, 255, 0.6), 0 0 30px rgba(255, 46, 99, 0.4);
+            line-height: 1.6;
         }
 
         .button {
-            padding: 15px 35px;
-            background: linear-gradient(45deg, #516fff, #ff6f91);
-            color: white;
+            padding: 18px 40px;
+            background: linear-gradient(45deg, #6b48ff, #ff2e63, #00d4ff);
+            color: #fff;
             border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
+            border-radius: 60px;
+            font-size: 1.4rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
             opacity: 0;
-            animation: fadeIn 1s forwards 1.5s;
-            box-shadow: 0 10px 30px rgba(81, 111, 255, 0.6), 0 0 20px rgba(255, 111, 145, 0.4);
+            animation: epicFadeIn 1.2s forwards 1.8s;
+            box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7), 0 0 25px rgba(255, 46, 99, 0.5);
             position: relative;
             overflow: hidden;
-            touch-action: manipulation; /* Улучшает сенсорное взаимодействие */
+            transform: translateZ(10px);
         }
 
         .button::before {
@@ -130,123 +138,127 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+            transition: width 0.7s ease, height 0.7s ease;
         }
 
         .button:hover::before,
         .button:active::before {
-            width: 300px;
-            height: 300px;
+            width: 350px;
+            height: 350px;
         }
 
         .button:hover,
         .button:active {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 15px 40px rgba(81, 111, 255, 0.8), 0 0 30px rgba(255, 111, 145, 0.6);
+            transform: scale(1.08) translateY(-8px) translateZ(15px);
+            box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9), 0 0 35px rgba(255, 46, 99, 0.7);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes epicFadeIn {
+            0% { opacity: 0; transform: translateY(40px) scale(0.9); filter: blur(5px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
 
-        @keyframes particleFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-50px) scale(1.1); }
+        @keyframes particleDrift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.85; }
+            25% { transform: translate(-30px, -50px) rotate(15deg) scale(1.15); opacity: 1; }
+            50% { transform: translate(20px, -20px) rotate(-10deg) scale(1.1); opacity: 0.9; }
+            75% { transform: translate(-10px, 30px) rotate(5deg) scale(1.05); opacity: 0.95; }
         }
 
-        @keyframes glowPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.5; }
+        @keyframes glowEpic {
+            0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(45deg); opacity: 0.4; filter: blur(120px); }
+            50% { transform: translate(-50%, -50%) scale(1.4) rotate(55deg); opacity: 0.6; filter: blur(140px); }
         }
 
-        @keyframes tabTransitionOut {
-            0% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
-            100% { opacity: 0; transform: scale(0.8) rotateX(20deg); filter: blur(10px); }
-        }
-
-        @keyframes tabTransitionIn {
-            0% { opacity: 0; transform: scale(1.2) rotateX(-20deg); filter: blur(10px); }
-            100% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
+        @keyframes backgroundPulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
         }
 
         .tab {
             display: none;
-            animation: tabTransitionIn 0.6s ease-out forwards;
+            animation: tabTransitionIn 0.8s ease-out forwards;
         }
 
-        .tab.active {
-            display: block;
+        .tab.active { display: block; }
+        .tab.exiting { animation: tabTransitionOut 0.8s ease-in forwards; }
+
+        @keyframes tabTransitionOut {
+            0% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
+            100% { opacity: 0; transform: scale(0.85) rotateX(25deg); filter: blur(15px); }
         }
 
-        .tab.exiting {
-            animation: tabTransitionOut 0.6s ease-in forwards;
+        @keyframes tabTransitionIn {
+            0% { opacity: 0; transform: scale(1.15) rotateX(-25deg); filter: blur(15px); }
+            100% { opacity: 1; transform: scale(1) rotateX(0deg); filter: blur(0px); }
         }
 
         .nominees {
             display: flex;
             flex-direction: column;
-            gap: 25px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 35px;
         }
 
         .nominee-subblock {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
+            gap: 30px;
         }
 
         .nominee {
-            background: rgba(30, 30, 60, 0.8);
-            border-radius: 20px;
-            padding: 20px;
+            background: rgba(25, 25, 50, 0.85);
+            border-radius: 25px;
+            padding: 25px;
             text-align: center;
             position: relative;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
             cursor: pointer;
             overflow: hidden;
-            border: 1px solid rgba(81, 111, 255, 0.3);
-            transform: rotateX(10deg);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            user-select: none; /* Предотвращает выделение текста при тапе */
+            border: 2px solid rgba(107, 72, 255, 0.4);
+            transform: rotateX(12deg) scale(0.95);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
         }
 
         .nominee:hover,
-        .nominee:active {
-            transform: rotateX(0deg) translateY(-10px);
-            box-shadow: 0 20px 50px rgba(81, 111, 255, 0.5), 0 0 30px rgba(255, 111, 145, 0.3);
-            border: 1px solid rgba(81, 111, 255, 0.8);
+        .nominee.active {
+            transform: rotateX(0deg) scale(1) translateY(-12px);
+            box-shadow: 0 25px 60px rgba(107, 72, 255, 0.6), 0 0 40px rgba(255, 46, 99, 0.4);
+            border: 2px solid rgba(107, 72, 255, 0.9);
         }
 
         .nominee img {
             width: 100%;
-            border-radius: 15px;
-            margin-bottom: 12px;
-            transition: transform 0.4s ease;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+            border-radius: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.5s ease;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
         }
 
         .nominee:hover img,
-        .nominee:active img {
-            transform: scale(1.1);
+        .nominee.active img {
+            transform: scale(1.15) translateZ(10px);
         }
 
         .nominee h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.3rem;
+            font-weight: 700;
             margin: 0;
             color: #fff;
-            text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
+            text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .nominee.selected {
-            background: rgba(81, 111, 255, 0.3);
-            border: 2px solid #516fff;
-            box-shadow: 0 0 30px rgba(81, 111, 255, 0.8), inset 0 0 20px rgba(81, 111, 255, 0.4);
-            transform: rotateX(0deg);
+            background: rgba(107, 72, 255, 0.35);
+            border: 3px solid #6b48ff;
+            box-shadow: 0 0 40px rgba(107, 72, 255, 0.9), inset 0 0 25px rgba(107, 72, 255, 0.5);
+            transform: rotateX(0deg) scale(1);
         }
 
         .nominee-actions {
@@ -256,36 +268,35 @@
             transform: translate(-50%, -50%);
             display: none;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             width: 90%;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             z-index: 2;
         }
 
-        .nominee:hover .nominee-actions,
         .nominee.active .nominee-actions {
             display: flex;
             opacity: 1;
         }
 
         .vote-action {
-            padding: 15px 30px;
+            padding: 16px 32px;
             border: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             color: #fff;
-            background: linear-gradient(45deg, #ff6f91, #516fff, #00c4cc);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(81, 111, 255, 0.6);
+            background: linear-gradient(45deg, #ff2e63, #6b48ff, #00d4ff);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(107, 72, 255, 0.7);
             position: relative;
             overflow: hidden;
-            animation: pulse 2s infinite;
-            touch-action: manipulation;
+            animation: pulseEpic 2.5s infinite;
+            white-space: nowrap;
         }
 
         .vote-action::before {
@@ -295,101 +306,63 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.35);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+            transition: width 0.7s ease, height 0.7s ease;
         }
 
         .vote-action:hover::before,
         .vote-action:active::before {
-            width: 400px;
-            height: 400px;
+            width: 450px;
+            height: 450px;
         }
 
         .vote-action:hover,
         .vote-action:active {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 20px 40px rgba(81, 111, 255, 0.8), 0 0 50px rgba(255, 111, 145, 0.7);
-            background: linear-gradient(45deg, #00c4cc, #ff6f91, #516fff);
+            transform: scale(1.12) translateY(-6px);
+            box-shadow: 0 25px 50px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.8);
+            background: linear-gradient(45deg, #00d4ff, #ff2e63, #6b48ff);
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(81, 111, 255, 0.6); }
-            50% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 40px rgba(81, 111, 255, 0.8); }
-            100% { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(81, 111, 255, 0.6); }
-        }
-
-        .nominee-tab {
-            position: relative;
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(81, 111, 255, 0.2);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            touch-action: manipulation;
-        }
-
-        .back-button:hover,
-        .back-button:active {
-            background: rgba(81, 111, 255, 0.5);
-            transform: scale(1.15) rotate(5deg);
-            box-shadow: 0 15px 30px rgba(81, 111, 255, 0.6);
-        }
-
-        .nominee-info {
-            margin-top: 25px;
-            padding: 25px;
-            background: rgba(30, 30, 60, 0.8);
-            border-radius: 20px;
-            font-size: 1.1rem;
-            font-weight: 400;
-            line-height: 1.6;
-            border: 1px solid rgba(81, 111, 255, 0.3);
-            transition: all 0.4s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            text-shadow: 0 0 10px rgba(81, 111, 255, 0.5);
-        }
-
-        .submit-button {
-            margin-top: 35px;
-            display: none;
+        @keyframes pulseEpic {
+            0% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(107, 72, 255, 0.7); }
+            50% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 50px rgba(107, 72, 255, 0.9); }
+            100% { box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(107, 72, 255, 0.7); }
         }
 
         .row-title {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            margin: 35px 0 20px;
-            background: linear-gradient(90deg, #ff6f91, #516fff, #00c4cc);
+            margin: 40px 0 25px;
+            background: linear-gradient(90deg, #ff2e63, #6b48ff, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(81, 111, 255, 0.8), 0 0 40px rgba(255, 111, 145, 0.6);
-            letter-spacing: 2px;
+            text-shadow: 0 0 25px rgba(107, 72, 255, 0.9), 0 0 50px rgba(255, 46, 99, 0.7);
+            letter-spacing: 3px;
+            animation: epicFadeIn 1s forwards;
+        }
+
+        .submit-button {
+            margin-top: 40px;
+            display: none;
         }
 
         @media (max-width: 480px) {
-            h1 { font-size: 2.5rem; }
-            .welcome-text { font-size: 1.2rem; }
-            .button { font-size: 1.1rem; padding: 12px 25px; }
-            .vote-action { font-size: 1rem; padding: 12px 25px; }
-            .nominee h3 { font-size: 1rem; }
-            .row-title { font-size: 1.7rem; }
+            h1 { font-size: 2.8rem; }
+            .welcome-text { font-size: 1.3rem; }
+            .button { font-size: 1.2rem; padding: 14px 30px; }
+            .vote-action { 
+                font-size: 1.1rem; 
+                padding: 14px 28px; 
+                letter-spacing: 1.5px;
+            }
+            .nominee h3 { font-size: 1.1rem; }
+            .row-title { font-size: 1.9rem; }
             .container { padding: 20px; }
-            .glow-effect { width: 300px; height: 300px; }
+            .glow-effect { width: 400px; height: 400px; }
+            .nominee-subblock { gap: 20px; }
+            .nominee { padding: 20px; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -797,26 +770,26 @@
         nominees.forEach(nominee => {
             const voteAction = nominee.querySelector('.vote-action');
 
-            // Поддержка мыши
-            nominee.addEventListener('mouseenter', () => {
-                nominee.classList.add('active');
-            });
-            nominee.addEventListener('mouseleave', () => {
-                nominee.classList.remove('active');
+            nominee.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!nominee.classList.contains('selected')) {
+                    nominee.classList.toggle('active');
+                }
             });
 
-            // Поддержка сенсорных устройств
             nominee.addEventListener('touchstart', (e) => {
                 e.preventDefault();
-                nominee.classList.add('active');
+                if (!nominee.classList.contains('selected')) {
+                    nominee.classList.add('active');
+                }
             });
+
             nominee.addEventListener('touchend', () => {
                 setTimeout(() => {
-                    nominee.classList.remove('active');
+                    if (!nominee.classList.contains('selected')) {
+                        nominee.classList.remove('active');
+                    }
                 }, 2000);
-            });
-            nominee.addEventListener('touchcancel', () => {
-                nominee.classList.remove('active');
             });
 
             voteAction.addEventListener('click', (e) => {
@@ -826,6 +799,7 @@
                 const nomineeId = nominee.getAttribute('data-nominee');
                 selectedNominees[row] = nomineeId;
                 nominee.classList.add('selected');
+                nominee.classList.remove('active');
                 document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
                     if (n !== nominee) {
                         n.style.pointerEvents = 'none';
@@ -837,11 +811,13 @@
 
             voteAction.addEventListener('touchstart', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 playSound(voteSound);
                 const row = nominee.getAttribute('data-row');
                 const nomineeId = nominee.getAttribute('data-nominee');
                 selectedNominees[row] = nomineeId;
                 nominee.classList.add('selected');
+                nominee.classList.remove('active');
                 document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
                     if (n !== nominee) {
                         n.style.pointerEvents = 'none';
@@ -868,16 +844,6 @@
             setTimeout(() => tg.close(), 3000);
         });
 
-        submitVotes.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            playSound(voteSound);
-            const userId = tg.initDataUnsafe.user?.id || 'Аноним';
-            const username = tg.initDataUnsafe.user?.username || 'Аноним';
-            sendVoteToTelegram(userId, username, selectedNominees);
-            switchTab('tab5');
-            setTimeout(() => tg.close(), 3000);
-        });
-
         function switchTab(tabId) {
             const activeTab = document.querySelector('.tab.active');
             if (activeTab) {
@@ -887,7 +853,7 @@
                     activeTab.classList.remove('active', 'exiting');
                     const newTab = document.getElementById(tabId);
                     newTab.classList.add('active');
-                }, 600); // Длительность анимации выхода
+                }, 800);
             } else {
                 document.getElementById(tabId).classList.add('active');
             }
