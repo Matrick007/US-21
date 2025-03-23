@@ -72,7 +72,7 @@
         position: relative;
         z-index: 1;
         max-height: 90vh;
-        overflow-y: hidden;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         border: 3px solid rgba(107, 72, 255, 0.7);
         animation: containerEntrance 1.5s ease-out;
@@ -294,6 +294,8 @@
     .submit-button {
         margin-top: 40px;
         display: none;
+        width: 100%;
+        max-width: 300px;
     }
 
     @keyframes containerEntrance {
@@ -426,7 +428,7 @@
 
     <div class="container">
         <div id="tab1" class="tab active">
-            <h1 id="welcomeText">Добро пожаловать!</h1>
+            <h1 id="welcomeText">Привет!</h1>
             <p class="welcome-text">Мы рады видеть вас здесь!</p>
             <button class="button" id="nextButton">Начать</button>
         </div>
@@ -713,7 +715,7 @@
             <div class="nomination-frame" data-nomination="Мем">
                 <div class="row-title">Человек Мем Года</div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="Сериков" data-row="мем">
+                    <div class="nominee" data-nominee="Сериков" data-row="Мем">
                         <div class="nominee-front">
                             <img src="photo/mem/сериков.jpg" alt="">
                             <h3>Сериков Александр</h3>
@@ -723,7 +725,7 @@
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="Туленков" data-row="мем">
+                    <div class="nominee" data-nominee="Туленков" data-row="Мем">
                         <div class="nominee-front">
                             <img src="photo/mem/дрюня.jpg" alt="">
                             <h3>Туленков Андрей</h3>
@@ -954,38 +956,8 @@
                 }
             });
 
-            nominee.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (!nominee.classList.contains('selected') && !nominee.classList.contains('flipped')) {
-                    playSound(clickSound);
-                    nominee.classList.add('flipped');
-                    setTimeout(() => {
-                        nominee.classList.remove('flipped');
-                    }, 4000);
-                }
-            });
-
             if (voteAction) {
                 voteAction.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    playSound(clickSound);
-                    const row = nominee.getAttribute('data-row');
-                    const nomineeId = nominee.getAttribute('data-nominee');
-                    selectedNominees[row] = nomineeId;
-                    nominee.classList.add('selected');
-                    nominee.classList.remove('flipped');
-                    document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
-                        if (n !== nominee) {
-                            n.style.pointerEvents = 'none';
-                            n.style.opacity = '0.5';
-                        }
-                    });
-                    checkAllVotes();
-                    scrollToNextNomination(row);
-                });
-
-                voteAction.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
                     e.stopPropagation();
                     playSound(clickSound);
                     const row = nominee.getAttribute('data-row');
@@ -1010,6 +982,7 @@
             if (rows.size === Object.keys(selectedNominees).length) {
                 if (submitVotes) {
                     submitVotes.style.display = 'block';
+                    submitVotes.style.visibility = 'visible';
                     scrollToSubmitButton();
                 }
             }
@@ -1047,9 +1020,6 @@
             playSound(clickSound);
             tg.close();
         });
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
