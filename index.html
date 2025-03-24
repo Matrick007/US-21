@@ -12,15 +12,23 @@
         box-sizing: border-box;
         -webkit-user-select: none;
         user-select: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    html, body {
+        height: 100%;
+        overflow: hidden;
+        touch-action: none;
     }
 
     body {
         font-family: 'Orbitron', sans-serif;
         background: #0a0a23;
         color: #fff;
-        min-height: 100vh;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
     }
 
     .background {
@@ -61,32 +69,108 @@
     }
 
     .container {
-        width: 95%;
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 25px;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 20px;
         background: rgba(15, 15, 35, 0.95);
-        border-radius: 30px;
+        border-radius: 0;
         backdrop-filter: blur(25px);
-        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7), inset 0 0 25px rgba(107, 72, 255, 0.3);
+        box-shadow: inset 0 0 25px rgba(107, 72, 255, 0.3);
         position: relative;
         z-index: 1;
-        max-height: 90vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
         border: 3px solid rgba(107, 72, 255, 0.7);
         animation: containerEntrance 1.5s ease-out;
     }
 
+    .menu-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(45deg, #6b48ff, #ff2e63);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s infinite;
+    }
+
+    .menu-button::before {
+        content: "☰";
+        color: #fff;
+        font-size: 24px;
+    }
+
+    .menu {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: rgba(25, 25, 50, 0.95);
+        border-radius: 15px;
+        padding: 10px;
+        display: none;
+        z-index: 11;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu-item {
+        padding: 10px 20px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s;
+    }
+
+    .menu-item:hover {
+        background: rgba(107, 72, 255, 0.5);
+    }
+
+    .info-panel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 15, 35, 0.98);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 12;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .info-panel p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .close-info {
+        padding: 10px 20px;
+        background: linear-gradient(45deg, #ff2e63, #6b48ff);
+        border: none;
+        border-radius: 50px;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
     h1 {
-        font-size: 3.5rem;
+        font-size: 3rem;
         font-weight: 900;
         margin-bottom: 30px;
         background: linear-gradient(90deg, #6b48ff, #ff2e63, #00d4ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 30px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.7);
-        animation: textGlow 3s infinite alternate, floatText 4s infinite ease-in-out;
+        text-shadow: 0 0 30px rgba(107, 72, 255, 0.9);
+        animation: textGlow 3s infinite alternate;
     }
 
     .welcome-text {
@@ -94,7 +178,6 @@
         font-weight: 500;
         color: rgba(255, 255, 255, 0.9);
         text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
-        animation: fadeInUp 1.5s ease-out;
     }
 
     .button {
@@ -108,100 +191,78 @@
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7);
-        position: relative;
-        overflow: hidden;
         animation: buttonPulse 2s infinite;
     }
 
     .button:hover {
-        transform: scale(1.1) translateY(-5px);
+        transform: scale(1.1);
         box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9);
     }
 
     .tab {
         display: none;
+        height: 100%;
+        overflow: hidden;
     }
 
     .tab.active {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         animation: tabTransitionIn 0.8s ease-out forwards;
     }
 
-    #tab1 {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 90vh;
-        text-align: center;
-    }
-
-    #tab1 .welcome-text {
-        margin-bottom: 30px;
-    }
-
-    #tab5 {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 90vh;
-        text-align: center;
+    #tab3 {
+        justify-content: flex-start;
+        padding-top: 20px;
+        overflow-y: auto;
     }
 
     .nomination-frame {
         background: rgba(20, 20, 40, 0.9);
         border: 2px solid rgba(107, 72, 255, 0.8);
         border-radius: 20px;
-        padding: 20px;
+        padding: 25px;
         margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(107, 72, 255, 0.2);
-        animation: frameEntrance 1s ease-out;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        width: 100%;
     }
 
     .row-title {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         font-weight: 800;
-        margin: 20px 0 25px;
-        background: linear-gradient(90deg, #ff2e63, #6b48ff, #00d4ff);
+        margin-bottom: 30px;
+        background: linear-gradient(90deg, #ff2e63, #6b48ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 25px rgba(107, 72, 255, 0.9);
     }
 
     .nominee-subblock {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
-        width: 100%;
+        gap: 25px;
         justify-content: center;
-        margin-top: 20px;
     }
 
     .nominee {
         background: rgba(25, 25, 50, 0.9);
-        border-radius: 25px;
-        padding: 15px;
+        border-radius: 30px;
+        padding: 20px;
         text-align: center;
-        transition: transform 0.6s ease;
+        transition: transform 0.3s ease;
         cursor: pointer;
         border: 2px solid rgba(107, 72, 255, 0.5);
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        animation: nomineeFloat 12s infinite ease-in-out;
-        flex: 0 0 auto;
+        flex: 0 0 calc(50% - 25px);
+        min-height: 250px;
         position: relative;
         perspective: 1000px;
-        min-height: 200px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: hidden;
     }
 
     .nominee:hover,
     .nominee.active {
-        transform: scale(1.05) translateY(-10px);
-        box-shadow: 0 25px 60px rgba(107, 72, 255, 0.7);
+        transform: scale(1.05);
         border-color: rgba(107, 72, 255, 1);
     }
 
@@ -217,7 +278,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 15px;
     }
 
     .nominee-front {
@@ -227,7 +287,6 @@
     .nominee-back {
         transform: rotateY(180deg);
         background: rgba(25, 25, 50, 0.9);
-        border-radius: 25px;
     }
 
     .nominee.flipped .nominee-front {
@@ -240,87 +299,62 @@
 
     .nominee img {
         width: 100%;
-        max-width: 150px;
+        max-width: 180px;
         height: auto;
         border-radius: 20px;
-        margin-bottom: 10px;
-        object-fit: contain;
+        margin-bottom: 15px;
     }
 
     .nominee h3 {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: #fff;
-        text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
-        white-space: normal;
-        word-wrap: break-word;
-        max-width: 100%;
         padding: 0 10px;
     }
 
     .nominee-description {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         color: rgba(255, 255, 255, 0.9);
-        text-align: center;
-        white-space: normal;
-        word-wrap: break-word;
-        max-width: 100%;
-        margin-bottom: 10px;
         padding: 0 10px;
+        margin-bottom: 15px;
     }
 
     .vote-action {
-        padding: 10px 20px;
+        padding: 12px 25px;
         border: none;
         border-radius: 50px;
-        font-size: 1rem;
+        font-size: 1.2rem;
         font-weight: 700;
         cursor: pointer;
         color: #fff;
-        background: linear-gradient(45deg, #ff2e63, #6b48ff, #00d4ff);
+        background: linear-gradient(45deg, #ff2e63, #6b48ff);
         box-shadow: 0 10px 25px rgba(107, 72, 255, 0.7);
-        transition: all 0.3s ease;
-        white-space: nowrap;
-        width: 100%;
-        max-width: 150px;
-        animation: votePulse 2s infinite;
-    }
-
-    .vote-action:hover {
-        transform: scale(1.1);
-        box-shadow: 0 15px 35px rgba(107, 72, 255, 0.9);
     }
 
     .submit-button {
-        margin-top: 40px;
+        margin: 40px auto;
         display: none;
-        width: 100%;
-        max-width: 300px;
+        width: 80%;
+        max-width: 350px;
     }
 
     @keyframes containerEntrance {
-        0% { transform: scale(0.8) translateY(100px); opacity: 0; }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
     }
 
     @keyframes textGlow {
-        0% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.7); }
-        50% { text-shadow: 0 0 40px rgba(107, 72, 255, 1), 0 0 80px rgba(255, 46, 99, 0.9); }
-        100% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9), 0 0 60px rgba(255, 46, 99, 0.7); }
-    }
-
-    @keyframes floatText {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(-15px); }
-        100% { transform: translateY(0); }
+        0% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9); }
+        50% { text-shadow: 0 0 40px rgba(107, 72, 255, 1); }
+        100% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9); }
     }
 
     @keyframes particleDrift {
-        0% { transform: translate(0, 0) rotate(0deg); }
-        25% { transform: translate(-40px, -60px) rotate(20deg); }
-        50% { transform: translate(30px, -30px) rotate(-15deg); }
-        75% { transform: translate(-20px, 40px) rotate(10deg); }
-        100% { transform: translate(0, 0) rotate(0deg); }
+        0% { transform: translate(0, 0); }
+        25% { transform: translate(-40px, -60px); }
+        50% { transform: translate(30px, -30px); }
+        75% { transform: translate(-20px, 40px); }
+        100% { transform: translate(0, 0); }
     }
 
     @keyframes particleFade {
@@ -351,65 +385,25 @@
         100% { box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7); }
     }
 
-    @keyframes votePulse {
-        0% { box-shadow: 0 10px 25px rgba(107, 72, 255, 0.7); }
-        50% { box-shadow: 0 15px 35px rgba(107, 72, 255, 0.9); }
-        100% { box-shadow: 0 10px 25px rgba(107, 72, 255, 0.7); }
-    }
-
-    @keyframes nomineeFloat {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-        100% { transform: translateY(0); }
-    }
-
-    @keyframes frameEntrance {
-        0% { transform: translateY(50px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-    }
-
-    @media (min-width: 481px) {
-        .nominee {
-            flex: 0 0 calc(25% - 20px);
-            max-width: calc(25% - 20px);
-        }
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 10px rgba(107, 72, 255, 0.7); }
+        50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(107, 72, 255, 1); }
+        100% { transform: scale(1); box-shadow: 0 0 10px rgba(107, 72, 255, 0.7); }
     }
 
     @media (max-width: 480px) {
-        h1 { font-size: 2.5rem; }
+        h1 { font-size: 2.2rem; }
         .welcome-text { font-size: 1.2rem; }
-        .button { 
-            font-size: 1.1rem; 
-            padding: 14px 25px; 
-            width: 100%;
+        .button { font-size: 1.2rem; padding: 15px 30px; }
+        .row-title { font-size: 2rem; }
+        .nominee { 
+            flex: 0 0 calc(50% - 25px); 
+            min-height: 280px;
         }
-        .nominee {
-            flex: 0 0 calc(50% - 20px);
-            max-width: calc(50% - 20px);
-            padding: 10px;
-            min-height: 180px;
-        }
-        .nominee img {
-            max-width: 120px;
-        }
-        .nominee h3 {
-            font-size: 1rem;
-        }
-        .nominee-description {
-            font-size: 0.8rem;
-        }
-        .vote-action {
-            font-size: 0.9rem;
-            padding: 8px 15px;
-            max-width: 120px;
-        }
-        .container {
-            margin: 10px;
-            padding: 15px;
-        }
-        .row-title {
-            font-size: 1.8rem;
-        }
+        .nominee img { max-width: 150px; }
+        .nominee h3 { font-size: 1.2rem; }
+        .nominee-description { font-size: 0.9rem; }
+        .vote-action { font-size: 1rem; padding: 10px 20px; }
     }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -427,8 +421,18 @@
     </audio>
 
     <div class="container">
+        <button class="menu-button"></button>
+        <div class="menu">
+            <div class="menu-item" data-info="about">О приложении</div>
+            <div class="menu-item" data-info="rules">Правила</div>
+        </div>
+        <div class="info-panel">
+            <p id="info-text"></p>
+            <button class="close-info">Закрыть</button>
+        </div>
+
         <div id="tab1" class="tab active">
-            <h1 id="welcomeText">Привет!</h1>
+            <h1><center>Добро пожаловать!</center></h1>
             <p class="welcome-text">Мы рады видеть вас здесь!</p>
             <button class="button" id="nextButton">Начать</button>
         </div>
@@ -437,7 +441,7 @@
             <h1>Голосование</h1>
 
             <div class="nomination-frame" data-nomination="Токсик">
-                <div class="row-title" id="toxic-year">Токсик года</div>
+                <div class="row-title"><center>Токсик года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Кирилл" data-row="Токсик">
                         <div class="nominee-front">
@@ -483,7 +487,7 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Оператор">
-                <div class="row-title">Оператор года</div>
+                <div class="row-title"><center>Оператор года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Лукин" data-row="Оператор">
                         <div class="nominee-front">
@@ -529,7 +533,7 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Пара">
-                <div class="row-title">Пара Года</div>
+                <div class="row-title"><center>Пара Года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="дима" data-row="Пара">
                         <div class="nominee-front">
@@ -543,8 +547,8 @@
                     </div>
                     <div class="nominee" data-nominee="куликов" data-row="Пара">
                         <div class="nominee-front">
-                            <img src="photo/para/куликов.jpg" alt="Виталик и Полина">
-                            <h3>Виталик и Полина</h3>
+                            <img src="" alt="">
+                            <h3>убрал</h3>
                         </div>
                         <div class="nominee-back">
                             <div class="nominee-description">Взрывная энергия</div>
@@ -575,7 +579,7 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Прорыв">
-                <div class="row-title">Прорыв года</div>
+                <div class="row-title"><center>Прорыв года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Фролов" data-row="Прорыв">
                         <div class="nominee-front">
@@ -621,7 +625,7 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Спокойный">
-                <div class="row-title">Самый Спокойный</div>
+                <div class="row-title"><center>Самый Спокойный</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Ролдугин" data-row="Спокойный">
                         <div class="nominee-front">
@@ -645,7 +649,7 @@
                     </div>
                     <div class="nominee" data-nominee="Голиков" data-row="Спокойный">
                         <div class="nominee-front">
-                            <img src="photo/zzzzz/голиков.jpg" alt="">
+                            <img src="photo/zzzzz/голиков.jpg" alt="Голиков Матвей">
                             <h3>Голиков Матвей</h3>
                         </div>
                         <div class="nominee-back">
@@ -655,7 +659,7 @@
                     </div>
                     <div class="nominee" data-nominee="Алиев" data-row="Спокойный">
                         <div class="nominee-front">
-                            <img src="photo/zzzzz/алиев.jpg" alt="Павлов Алексей">
+                            <img src="photo/zzzzz/алиев.jpg" alt="Алиев Александр">
                             <h3>Алиев Александр</h3>
                         </div>
                         <div class="nominee-back">
@@ -667,7 +671,7 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Воздухан">
-                <div class="row-title">Воздухан Года</div>
+                <div class="row-title"><center>Воздухан Года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Галкин" data-row="Воздухан">
                         <div class="nominee-front">
@@ -713,11 +717,11 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Мем">
-                <div class="row-title">Человек Мем Года</div>
+                <div class="row-title"><center>Человек Мем Года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Сериков" data-row="Мем">
                         <div class="nominee-front">
-                            <img src="photo/mem/сериков.jpg" alt="">
+                            <img src="photo/mem/сериков.jpg" alt="Сериков Александр">
                             <h3>Сериков Александр</h3>
                         </div>
                         <div class="nominee-back">
@@ -727,7 +731,7 @@
                     </div>
                     <div class="nominee" data-nominee="Туленков" data-row="Мем">
                         <div class="nominee-front">
-                            <img src="photo/mem/дрюня.jpg" alt="">
+                            <img src="photo/mem/дрюня.jpg" alt="Туленков Андрей">
                             <h3>Туленков Андрей</h3>
                         </div>
                         <div class="nominee-back">
@@ -737,7 +741,7 @@
                     </div>
                     <div class="nominee" data-nominee="Куликов" data-row="Мем">
                         <div class="nominee-front">
-                            <img src="photo/mem/куликов.jpg" alt="">
+                            <img src="photo/mem/куликов.jpg" alt="Куликов Виталик">
                             <h3>Куликов Виталик</h3>
                         </div>
                         <div class="nominee-back">
@@ -747,7 +751,7 @@
                     </div>
                     <div class="nominee" data-nominee="Катюха" data-row="Мем">
                         <div class="nominee-front">
-                            <img src="photo/mem/полякова.jpg" alt="">
+                            <img src="photo/mem/полякова.jpg" alt="Полякова Катя">
                             <h3>Полякова Катя</h3>
                         </div>
                         <div class="nominee-back">
@@ -759,11 +763,11 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Канал">
-                <div class="row-title">Канал Года</div>
+                <div class="row-title"><center>Канал Года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="мультифора" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/zvezdy.jpg" alt="'">
+                            <img src="photo/channel/zvezdy.jpg" alt="Мультифора">
                             <h3>Мультифора</h3>
                         </div>
                         <div class="nominee-back">
@@ -773,7 +777,7 @@
                     </div>
                     <div class="nominee" data-nominee="Бытовуха" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/memy.jpg" alt="">
+                            <img src="photo/channel/memy.jpg" alt="Бытовуха">
                             <h3>Бытовуха</h3>
                         </div>
                         <div class="nominee-back">
@@ -781,10 +785,9 @@
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-
                     <div class="nominee" data-nominee="биба и боба" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/novosti.jpg" alt="">
+                            <img src="photo/channel/novosti.jpg" alt="Биба и Боба">
                             <h3>Биба и Боба</h3>
                         </div>
                         <div class="nominee-back">
@@ -794,7 +797,7 @@
                     </div>
                     <div class="nominee" data-nominee="Кольеретка" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/iskry.jpg" alt="">
+                            <img src="photo/channel/iskry.jpg" alt="Кольеретка">
                             <h3>Кольеретка</h3>
                         </div>
                         <div class="nominee-back">
@@ -806,11 +809,11 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Пропажа">
-                <div class="row-title">Пропажа Года</div>
+                <div class="row-title"><center>Пропажа Года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Кобзев" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propazha/sergey.jpg" alt="а вот так">
+                            <img src="photo/propa;a/кобзев.jpg" alt="Кобзев Артем">
                             <h3>Кобзев Артем</h3>
                         </div>
                         <div class="nominee-back">
@@ -820,7 +823,7 @@
                     </div>
                     <div class="nominee" data-nominee="Жданов" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propa;a/жданов.jpg" alt="">
+                            <img src="photo/toxcik/жданов токсик.jpg" alt="Жданов Сергей">
                             <h3>Жданов Сергей</h3>
                         </div>
                         <div class="nominee-back">
@@ -830,7 +833,7 @@
                     </div>
                     <div class="nominee" data-nominee="Ролдугин" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propa;a/ролдугин.jpg" alt="">
+                            <img src="photo/propa;a/ролдугин.jpg" alt="Ролдугин Никита">
                             <h3>Ролдугин Никита</h3>
                         </div>
                         <div class="nominee-back">
@@ -840,7 +843,7 @@
                     </div>
                     <div class="nominee" data-nominee="Эльчин" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propa;a/караев.jpg" alt="">
+                            <img src="photo/propa;a/караев.jpg" alt="Караев Эльчин">
                             <h3>Караев Эльчин</h3>
                         </div>
                         <div class="nominee-back">
@@ -851,16 +854,19 @@
                 </div>
             </div>
 
+            <div id="voteReminder" class="welcome-text" style="margin-bottom: 20px;">
+                Пожалуйста, проконтролируйте, чтобы ваш голос был учтён во всех номинациях!
+            </div>
             <button class="button submit-button" id="submitVotes">Отправить</button>
         </div>
 
         <div id="tab5" class="tab">
-            <h1>Спасибо что потратили свое время!</h1>
+            <h1 id="thankYou" style="display: none;">Спасибо что потратили свое время!</h1>
         </div>
     </div>
 
     <script>
-        const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : {
+        const tg = window.Telegram?.WebApp || {
             initDataUnsafe: {},
             close: () => console.log("Закрытие приложения"),
             MainButton: {
@@ -879,44 +885,26 @@
             "Токсик", "Оператор", "Пара", "Прорыв", "Спокойный", 
             "Воздухан", "Мем", "Канал", "Пропажа"
         ];
+        const menuButton = document.querySelector('.menu-button');
+        const menu = document.querySelector('.menu');
+        const infoPanel = document.querySelector('.info-panel');
+        const infoText = document.getElementById('info-text');
+        const closeInfo = document.querySelector('.close-info');
+        const thankYou = document.getElementById('thankYou');
 
         function playSound(sound) {
             if (sound) {
                 sound.currentTime = 0;
-                sound.play().catch(error => console.error('Ошибка воспроизведения звука:', error));
+                sound.play().catch(error => console.error('Ошибка:', error));
             }
         }
 
         function switchTab(tabId) {
             const activeTab = document.querySelector('.tab.active');
             const newTab = document.getElementById(tabId);
-
-            if (!newTab) {
-                console.error(`Вкладка ${tabId} не найдена`);
-                return;
-            }
-
-            if (activeTab) {
-                activeTab.classList.remove('active');
-            }
+            if (activeTab) activeTab.classList.remove('active');
             newTab.classList.add('active');
             playSound(transitionSound);
-
-            if (tabId === 'tab3') {
-                setTimeout(() => {
-                    const firstSection = document.querySelector('.nomination-frame[data-nomination="Токсик"]');
-                    if (firstSection) {
-                        firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
-            }
-        }
-
-        if (nextButton) {
-            nextButton.addEventListener('click', () => {
-                playSound(clickSound);
-                switchTab('tab3');
-            });
         }
 
         function scrollToNextNomination(currentRow) {
@@ -932,72 +920,91 @@
             }
         }
 
-        function scrollToSubmitButton() {
-            const submitButton = document.getElementById('submitVotes');
-            if (submitButton) {
-                setTimeout(() => {
-                    submitButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 500);
-            }
-        }
+        menuButton.addEventListener('click', () => {
+            playSound(clickSound);
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                playSound(clickSound);
+                const info = item.getAttribute('data-info');
+                infoText.textContent = info === 'about' 
+                    ? 'Разработчик - Литнарович. Ведущие - Литнарович и Лукин!'
+                    : 'Выберите одного номинанта в каждой категории и отправьте голос!';
+                infoPanel.style.display = 'flex';
+                menu.style.display = 'none';
+            });
+        });
+
+        closeInfo.addEventListener('click', () => {
+            playSound(clickSound);
+            infoPanel.style.display = 'none';
+        });
+
+        nextButton.addEventListener('click', () => {
+            playSound(clickSound);
+            switchTab('tab3');
+            setTimeout(() => {
+                document.querySelector('.nomination-frame[data-nomination="Токсик"]').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        });
 
         const nominees = document.querySelectorAll('.nominee');
         nominees.forEach(nominee => {
             const voteAction = nominee.querySelector('.vote-action');
-
             nominee.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (!nominee.classList.contains('selected') && !nominee.classList.contains('flipped')) {
                     playSound(clickSound);
                     nominee.classList.add('flipped');
-                    setTimeout(() => {
-                        nominee.classList.remove('flipped');
-                    }, 4000);
+                    setTimeout(() => nominee.classList.remove('flipped'), 4000);
                 }
             });
 
-            if (voteAction) {
-                voteAction.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    playSound(clickSound);
-                    const row = nominee.getAttribute('data-row');
-                    const nomineeId = nominee.getAttribute('data-nominee');
-                    selectedNominees[row] = nomineeId;
-                    nominee.classList.add('selected');
-                    nominee.classList.remove('flipped');
-                    document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
-                        if (n !== nominee) {
-                            n.style.pointerEvents = 'none';
-                            n.style.opacity = '0.5';
-                        }
-                    });
-                    checkAllVotes();
-                    scrollToNextNomination(row);
+            voteAction.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playSound(clickSound);
+                const row = nominee.getAttribute('data-row');
+                const nomineeId = nominee.getAttribute('data-nominee');
+                selectedNominees[row] = nomineeId;
+                nominee.classList.add('selected');
+                nominee.classList.remove('flipped');
+                document.querySelectorAll(`.nominee[data-row="${row}"]`).forEach(n => {
+                    if (n !== nominee) {
+                        n.style.pointerEvents = 'none';
+                        n.style.opacity = '0.5';
+                    }
                 });
-            }
+                checkAllVotes();
+                scrollToNextNomination(row);
+            });
         });
 
         function checkAllVotes() {
             const rows = new Set([...document.querySelectorAll('.nominee')].map(n => n.getAttribute('data-row')));
+            const voteReminder = document.getElementById('voteReminder');
             if (rows.size === Object.keys(selectedNominees).length) {
-                if (submitVotes) {
-                    submitVotes.style.display = 'block';
-                    submitVotes.style.visibility = 'visible';
-                    scrollToSubmitButton();
-                }
+                submitVotes.style.display = 'block';
+                voteReminder.style.display = 'none';
+                setTimeout(() => {
+                    submitVotes.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500);
+            } else {
+                voteReminder.style.display = 'block';
+                submitVotes.style.display = 'none';
             }
         }
 
-        if (submitVotes) {
-            submitVotes.addEventListener('click', () => {
-                playSound(clickSound);
-                const userId = tg.initDataUnsafe.user?.id || 'Аноним';
-                const username = tg.initDataUnsafe.user?.username || 'Аноним';
-                sendVoteToTelegram(userId, username, selectedNominees);
-                switchTab('tab5');
-                setTimeout(() => tg.close(), 3000);
-            });
-        }
+        submitVotes.addEventListener('click', () => {
+            playSound(clickSound);
+            const userId = tg.initDataUnsafe.user?.id || 'Аноним';
+            const username = tg.initDataUnsafe.user?.username || 'Аноним';
+            sendVoteToTelegram(userId, username, selectedNominees);
+            switchTab('tab5');
+            thankYou.style.display = 'block';
+            setTimeout(() => tg.close(), 3000);
+        });
 
         function sendVoteToTelegram(userId, username, selectedNominees) {
             const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
@@ -1010,8 +1017,8 @@
                 body: JSON.stringify({ chat_id: chatId, text: message })
             })
             .then(response => response.json())
-            .then(data => console.log('Сообщение отправлено:', data))
-            .catch(error => console.error('Ошибка отправки:', error));
+            .then(data => console.log('Отправлено:', data))
+            .catch(error => console.error('Ошибка:', error));
         }
 
         tg.MainButton.setText("Закрыть");
