@@ -160,6 +160,7 @@ h1 {
     margin-bottom: 30px;
     background: linear-gradient(90deg, #6b48ff, #ff2e63, #00d4ff);
     -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
     text-shadow: 0 0 30px rgba(107, 72, 255, 0.9);
     animation: textGlow 3s infinite alternate;
 }
@@ -225,8 +226,8 @@ h1 {
     font-weight: 800;
     margin-bottom: 30px;
     background: linear-gradient(90deg, #ff2e63, #6b48ff);
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
 }
 
 .nominee-subblock {
@@ -329,6 +330,30 @@ h1 {
     max-width: 350px;
 }
 
+
+.input1 {
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    border-radius: 40px;
+}
+.btnSend {
+    margin-top: 10px;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    border-radius: 40px;
+    background-color: hotpink;
+    border:  1px solid #6b48ff;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.btnSend:hover {
+    background-color: #ff2e63;
+    padding: 30px;
+}
 @keyframes containerEntrance {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }

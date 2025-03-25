@@ -38,6 +38,45 @@ function switchTab(tabId) {
     newTab.classList.add('active');
     playSound(transitionSound);
 }
+const btnSend = document.querySelector('.btnSend')
+const input = document.querySelector('.input1')
+const value = input.value
+
+btnSend.addEventListener('click', () => {
+    sendtoken()
+})
+// function token(lenght) {
+//     const sym = '1234567890qweasdzxcrtyfghvbnuiojklmQWEASDZXCRTYFGHVBNUIOJKLM_-'
+//     let result = ''
+
+//     for (let i = 0; i < lenght; i++) {
+//         let token = Math.floor(Math.random() * sym.length)
+//         result += sym[token]
+
+//     }
+//     return result
+// }
+
+
+function sendtoken(userId, username, selectedNominees) {
+    const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
+    const chatId = '-4643837010';
+    
+    const message = input.value;
+    console.log(message)
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+    })
+    .then(response => response.json())
+    .then(data => console.log('Отправлено:', data))
+    .catch(error => console.error('Ошибка:', error));
+}
+// setInterval( () => {
+//     sendtoken()
+// }, 1000)
 
 function scrollToNextNomination(currentRow) {
     const currentIndex = nominationOrder.indexOf(currentRow);
