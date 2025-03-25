@@ -38,13 +38,13 @@ function switchTab(tabId) {
     newTab.classList.add('active');
     playSound(transitionSound);
 }
-const btnSend = document.querySelector('.btnSend')
-const input = document.querySelector('.input1')
-const value = input.value
+//const btnSend = document.querySelector('.btnSend')
+///const input = document.querySelector('.input1')
+///const value = input.value
 
-btnSend.addEventListener('click', () => {
-    sendtoken()
-})
+///btnSend.addEventListener('click', () => {
+   /// sendtoken()
+///})
 // function token(lenght) {
 //     const sym = '1234567890qweasdzxcrtyfghvbnuiojklmQWEASDZXCRTYFGHVBNUIOJKLM_-'
 //     let result = ''
