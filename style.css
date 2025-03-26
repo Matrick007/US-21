@@ -9,7 +9,7 @@
 
 html, body {
     height: 100%;
-    overflow: hidden;
+    overflow: visible; /* Для теста */
     touch-action: none;
 }
 
@@ -46,6 +46,10 @@ body {
     mix-blend-mode: screen;
 }
 
+#tab1.active .menu-button {
+    display: flex; /* Показываем только в активном tab1 */
+}
+
 .glow-effect {
     position: absolute;
     top: 50%;
@@ -71,7 +75,7 @@ body {
     box-shadow: inset 0 0 25px rgba(107, 72, 255, 0.3);
     position: relative;
     z-index: 1;
-    overflow: hidden;
+    overflow: visible; /* Для теста */
     border: 3px solid rgba(107, 72, 255, 0.7);
     animation: containerEntrance 1.5s ease-out;
 }
@@ -152,6 +156,70 @@ body {
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
+}
+
+.admin-panel {
+    position: fixed; /* Временно используем fixed для теста */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 15, 35, 0.98);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    border: 5px solid red; /* Для отладки */
+}
+
+.admin-panel input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(107, 72, 255, 0.7);
+    background: rgba(25, 25, 50, 0.9);
+    color: #fff;
+    font-size: 1rem;
+    display: block;
+    box-sizing: border-box;
+    width: 80%;
+    max-width: 300px;
+}
+
+.check-password, .close-admin {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #ff2e63, #6b48ff);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto;
+    box-sizing: border-box;
+}
+
+#voteResults {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-height: 70%;
+    overflow-y: auto;
+    display: block;
+    width: 80%;
+    max-width: 300px;
+    text-align: left;
+}
+
+.admin-panel input,
+.admin-panel .check-password,
+.admin-panel .close-admin,
+.admin-panel #voteResults {
+    display: block;
 }
 
 h1 {
@@ -329,8 +397,6 @@ h1 {
     width: 80%;
     max-width: 350px;
 }
-
-
 
 @keyframes containerEntrance {
     0% { transform: scale(0.8); opacity: 0; }
