@@ -3,56 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Telegram Mini App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Голосование 2024</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Open+Sans:ital@1&family=Montserrat:wght@800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="background"></div>
-    <div class="particles"></div>
-    <div class="glow-effect"></div>
-
-    <audio id="clickSound" preload="auto">
-        <source src="sounds/1.mp3" type="audio/mp3">
-    </audio>
-    <audio id="transitionSound" preload="auto">
-        <source src="sounds/2.mp3" type="audio/mp3">
-    </audio>
-
     <div class="container">
-        <button class="menu-button"></button>
-        <div class="menu">
-            <div class="menu-item" data-info="about">О приложении</div>
+        <div class="menu-button">☰</div>
+        <div class="menu" style="display: none;">
             <div class="menu-item" data-info="rules">Правила</div>
-            <div class="menu-item" data-info="admin">Админ</div>
+            <div class="menu-item" data-info="about">О разработчике</div>
+            <div class="menu-item" data-info="admin">Админ-панель</div>
         </div>
-        <div class="info-panel">
-            <p id="info-text"></p>
-            <button class="close-info">Закрыть</button>
+
+        <div class="info-panel" style="display: none;">
+            <div class="info-content">
+                <span class="close-info">×</span>
+                <p id="info-text"></p>
+            </div>
         </div>
+
         <div class="admin-panel" style="display: none;">
-            <input type="password" id="adminPassword" placeholder="Введите пароль" style="background: #fff; color: #000;">
-            <button class="check-password" style="background: #ff0000;">Подтвердить</button>
-            <div id="voteResults" style="display: none; background: #000; color: #fff;"></div>
-            <button class="close-admin" style="background: #00ff00;">Закрыть</button>
+            <div class="admin-content">
+                <span class="close-admin">×</span>
+                <input type="password" id="adminPassword" placeholder="Введите пароль">
+                <button class="check-password">Проверить</button>
+                <p id="voteResults" style="display: none;"></p>
+            </div>
         </div>
 
         <div id="tab1" class="tab active">
-            <h1><center>Добро пожаловать!</center></h1>
-            <p class="welcome-text">Мы рады видеть вас здесь!</p>
-            <button class="button" id="nextButton">Начать</button>
+            <h1>Добро пожаловать!</h1>
+            <p>Голосование за лучших из лучших в 2024 году начинается!</p>
+            <button id="nextButton">Начать</button>
         </div>
 
         <div id="tab3" class="tab">
-            <h1>Голосование</h1>
-
             <div class="nomination-frame" data-nomination="Токсик">
+                <div class="nomination-label" data-label="epic">epic</div>
                 <div class="row-title"><center>Токсик года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Кирилл" data-row="Токсик">
+                        <div class="winner-label" data-label="winner">Победитель 2024</div>
                         <div class="nominee-front">
-                            <img src="photo/toxcik/литнарович.png" alt="Литнарович Кирилл">
+                            <img src="photo/литнарович.jpg" alt="Литнарович Кирилл">
                             <h3>Литнарович Кирилл</h3>
                         </div>
                         <div class="nominee-back">
@@ -62,7 +56,7 @@
                     </div>
                     <div class="nominee" data-nominee="Полякова" data-row="Токсик">
                         <div class="nominee-front">
-                            <img src="photo/toxcik/катюха токсик.jpg" alt="Полякова Екатерина">
+                            <img src="" alt="нету">
                             <h3>Полякова Екатерина</h3>
                         </div>
                         <div class="nominee-back">
@@ -72,7 +66,7 @@
                     </div>
                     <div class="nominee" data-nominee="Куликов" data-row="Токсик">
                         <div class="nominee-front">
-                            <img src="photo/toxcik/куликов токсик.jpg" alt="Куликов Виталий">
+                            <img src="photo/куликов.jpg" alt="Куликов Виталий">
                             <h3>Куликов Виталий</h3>
                         </div>
                         <div class="nominee-back">
@@ -82,7 +76,7 @@
                     </div>
                     <div class="nominee" data-nominee="Жданов" data-row="Токсик">
                         <div class="nominee-front">
-                            <img src="photo/toxcik/жданов токсик.jpg" alt="Жданов Сергей">
+                            <img src="photo/жданов.jpg" alt="Жданов Сергей">
                             <h3>Жданов Сергей</h3>
                         </div>
                         <div class="nominee-back">
@@ -94,45 +88,46 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Оператор">
+                <div class="nomination-label" data-label="pro">pro</div>
                 <div class="row-title"><center>Оператор года</center></div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="Лукин" data-row="Оператор">
+                    <div class="nominee" data-nominee="Туленков" data-row="Оператор">
                         <div class="nominee-front">
-                            <img src="photo/operator/лукин.png" alt="Лукин Александр">
-                            <h3>Лукин Александр</h3>
+                            <img src="photo/дрюня.jpg" alt="Туленков">
+                            <h3>Туленков Андрей</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Мастер точных кадров</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Галкин" data-row="Оператор">
-                        <div class="nominee-front">
-                            <img src="photo/operator/galkin.png" alt="Галкин Виталий">
-                            <h3>Галкин Виталий</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Виртуоз съемки</div>
+                            <div class="nominee-description">Мастер кадра</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="Литнарович" data-row="Оператор">
                         <div class="nominee-front">
-                            <img src="photo/operator/litnarovich.png" alt="Литнарович Кирилл">
+                            <img src="photo/литнарович.jpg" alt="">
                             <h3>Литнарович Кирилл</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Творец кинематографических шедевров</div>
+                            <div class="nominee-description">Съёмка на миллион</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="Туленков" data-row="Оператор">
+                    <div class="nominee" data-nominee="галкин" data-row="Оператор">
                         <div class="nominee-front">
-                            <img src="photo/operator/туленков.png" alt="Туленков Андрей">
-                            <h3>Туленков Андрей</h3>
+                            <img src="photo/галкин.jpg" alt="">
+                            <h3>Галкин Виталий</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Художник света и тени</div>
+                            <div class="nominee-description">Красаучик</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="лукин" data-row="Оператор">
+                        <div class="nominee-front">
+                            <img src="photo/лукин.jpg" alt="">
+                            <h3>Лукин Александр</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Креативный взгляд</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
@@ -140,11 +135,12 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Пара">
+                <div class="nomination-label" data-label="hot">hot</div>
                 <div class="row-title"><center>Пара Года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="дима" data-row="Пара">
                         <div class="nominee-front">
-                            <img src="photo/para/дима.jpg" alt="Дмитрий и Алина">
+                            <img src="" alt="нету">
                             <h3>Дмитрий и Алина</h3>
                         </div>
                         <div class="nominee-back">
@@ -152,19 +148,9 @@
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="куликов" data-row="Пара">
-                        <div class="nominee-front">
-                            <img src="" alt="">
-                            <h3>убрал</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Взрывная энергия</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
                     <div class="nominee" data-nominee="рита" data-row="Пара">
                         <div class="nominee-front">
-                            <img src="photo/para/рита.jpg" alt="Рита и Арсений">
+                            <img src="" alt="нету">
                             <h3>Рита и Арсений</h3>
                         </div>
                         <div class="nominee-back">
@@ -174,7 +160,7 @@
                     </div>
                     <div class="nominee" data-nominee="эльчин" data-row="Пара">
                         <div class="nominee-front">
-                            <img src="photo/para/эльчин.jpg" alt="Эльчин и Кира">
+                            <img src="" alt="нету">
                             <h3>Эльчин и Кира</h3>
                         </div>
                         <div class="nominee-back">
@@ -182,15 +168,26 @@
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
+                    <div class="nominee" data-nominee="куликов" data-row="Пара">
+                        <div class="nominee-front">
+                            <img src="" alt="нету">
+                            <h3>Виталя и Полина</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Схожие мысли</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="nomination-frame" data-nomination="Прорыв">
+                <div class="nomination-label" data-label="top">top</div>
                 <div class="row-title"><center>Прорыв года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Фролов" data-row="Прорыв">
                         <div class="nominee-front">
-                            <img src="photo/proraf/фролов.jpg" alt="Фролов Андрей">
+                            <img src="photo/фролов.jpg" alt="Фролов Андрей">
                             <h3>Фролов Андрей</h3>
                         </div>
                         <div class="nominee-back">
@@ -200,7 +197,7 @@
                     </div>
                     <div class="nominee" data-nominee="Иванова Рита" data-row="Прорыв">
                         <div class="nominee-front">
-                            <img src="photo/proraf/рит.jpg" alt="Иванова Рита">
+                            <img src="" alt="нету">
                             <h3>Иванова Рита</h3>
                         </div>
                         <div class="nominee-back">
@@ -210,7 +207,7 @@
                     </div>
                     <div class="nominee" data-nominee="Сидоров" data-row="Прорыв">
                         <div class="nominee-front">
-                            <img src="photo/proraf/сидоров.jpg" alt="Сидоров Никита">
+                            <img src="photo/сидоров.jpg" alt="Сидоров Никита">
                             <h3>Сидоров Никита</h3>
                         </div>
                         <div class="nominee-back">
@@ -220,7 +217,7 @@
                     </div>
                     <div class="nominee" data-nominee="Жданов" data-row="Прорыв">
                         <div class="nominee-front">
-                            <img src="photo/proraf/жданов.jpg" alt="Жданов Сергей">
+                            <img src="photo/жданов.jpg" alt="Жданов Сергей">
                             <h3>Жданов Сергей</h3>
                         </div>
                         <div class="nominee-back">
@@ -232,45 +229,47 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Спокойный">
-                <div class="row-title"><center>Самый Спокойный</center></div>
+                <div class="nomination-label" data-label="calm">calm</div>
+                <div class="row-title"><center>Самый спокойный</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Ролдугин" data-row="Спокойный">
+                        <div class="winner-label" data-label="winner">Победитель 2024</div>
                         <div class="nominee-front">
-                            <img src="photo/zzzzz/ролдугин.jpg" alt="Ролдугин Никита">
+                            <img src="photo/ролдугин.jpg" alt="Ролдугин Никита">
                             <h3>Ролдугин Никита</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Спокойствие - его сила</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Берсенев Илья" data-row="Спокойный">
-                        <div class="nominee-front">
-                            <img src="photo/zzzzz/илюха.jpg" alt="Берсенев Илья">
-                            <h3>Берсенев Илья</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Ничто не выведет из равновесия</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Голиков" data-row="Спокойный">
-                        <div class="nominee-front">
-                            <img src="photo/zzzzz/голиков.jpg" alt="Голиков Матвей">
-                            <h3>Голиков Матвей</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Дзен в человеческом обличии</div>
+                            <div class="nominee-description">Оазис спокойствия</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="Алиев" data-row="Спокойный">
                         <div class="nominee-front">
-                            <img src="photo/zzzzz/алиев.jpg" alt="Алиев Александр">
+                            <img src="photo/алиев.jpg" alt="">
                             <h3>Алиев Александр</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Мир и покой</div>
+                            <div class="nominee-description">Мир в душе</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="Голик" data-row="Спокойный">
+                        <div class="nominee-front">
+                            <img src="photo/голиков.jpg" alt="">
+                            <h3>Голиков Матвей</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Непрошибаемый</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="Илья" data-row="Спокойный">
+                        <div class="nominee-front">
+                            <img src="photo/илюха.jpg" alt="">
+                            <h3>Берсенев Илья</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Скорость</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
@@ -278,45 +277,46 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Воздухан">
-                <div class="row-title"><center>Воздухан Года</center></div>
+                <div class="nomination-label" data-label="dream">dream</div>
+                <div class="row-title"><center>Воздухан года</center></div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="Галкин" data-row="Воздухан">
-                        <div class="nominee-front">
-                            <img src="photo/vozdyxan/галкин.jpg" alt="Галкин Виталий">
-                            <h3>Галкин Виталий</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Легкий как воздух</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Караев" data-row="Воздухан">
-                        <div class="nominee-front">
-                            <img src="photo/vozdyxan/эльчин.jpg" alt="Караев Эльчин">
-                            <h3>Караев Эльчин</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Парит над суетой</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Куликов" data-row="Воздухан">
-                        <div class="nominee-front">
-                            <img src="photo/vozdyxan/куликов.jpg" alt="Куликов Виталий">
-                            <h3>Куликов Виталий</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Эфирный мечтатель</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
                     <div class="nominee" data-nominee="Литнарович" data-row="Воздухан">
                         <div class="nominee-front">
-                            <img src="photo/vozdyxan/литнарович.jpg" alt="Литнарович Кирилл">
+                            <img src="photo/литнарович.jpg" alt="Литнарович">
                             <h3>Литнарович Кирилл</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Воздушный философ</div>
+                            <div class="nominee-description">Летает в облаках</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="Галкин" data-row="Воздухан">
+                        <div class="nominee-front">
+                            <img src="photo/галкин.jpg" alt="">
+                            <h3>Галкин Виталий</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Мечтатель</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="Эльвира" data-row="Воздухан">
+                        <div class="nominee-front">
+                            <img src="photo/ильчин.jpg" alt="">
+                            <h3>Караев Эльчин</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Витает в мыслях</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="катюха" data-row="Воздухан">
+                        <div class="nominee-front">
+                            <img src="" alt="нету">
+                            <h3>Полякова Екатерина</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Лгунья</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
@@ -324,45 +324,47 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Мем">
-                <div class="row-title"><center>Человек Мем Года</center></div>
+                <div class="nomination-label" data-label="meme">meme</div>
+                <div class="row-title"><center>Человек мем года</center></div>
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Сериков" data-row="Мем">
+                        <div class="winner-label" data-label="winner">Победитель 2024</div>
                         <div class="nominee-front">
-                            <img src="photo/mem/сериков.jpg" alt="Сериков Александр">
+                            <img src="photo/сериков.jpg" alt="Сериков">
                             <h3>Сериков Александр</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Ходячий мем</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Туленков" data-row="Мем">
-                        <div class="nominee-front">
-                            <img src="photo/mem/дрюня.jpg" alt="Туленков Андрей">
-                            <h3>Туленков Андрей</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Генератор смешного</div>
+                            <div class="nominee-description">Мемный гений</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="Куликов" data-row="Мем">
                         <div class="nominee-front">
-                            <img src="photo/mem/куликов.jpg" alt="Куликов Виталик">
-                            <h3>Куликов Виталик</h3>
+                            <img src="photo/куликов.jpg" alt="">
+                            <h3>Куликов Виталий</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Мемный король</div>
+                            <div class="nominee-description">Король мемов</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="Катюха" data-row="Мем">
+                    <div class="nominee" data-nominee="Туленков" data-row="Мем">
                         <div class="nominee-front">
-                            <img src="photo/mem/полякова.jpg" alt="Полякова Катя">
-                            <h3>Полякова Катя</h3>
+                            <img src="photo/дрюня.jpg" alt="">
+                            <h3>Туленков Андрей</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Воплощение юмора</div>
+                            <div class="nominee-description">Смешит всех</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="Полякова" data-row="Мем">
+                        <div class="nominee-front">
+                            <img src="" alt="нету">
+                            <h3>Полякова Екатерина</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">странная девушка</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
@@ -370,11 +372,12 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Канал">
+                <div class="nomination-label" data-label="new">new</div>
                 <div class="row-title"><center>Канал Года</center></div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="мультифора" data-row="Канал">
+                    <div class="nominee" data-nominee="айфон братки" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/zvezdy.jpg" alt="Мультифора">
+                            <img src="" alt="нету">
                             <h3>Айфон братки</h3>
                         </div>
                         <div class="nominee-back">
@@ -384,7 +387,7 @@
                     </div>
                     <div class="nominee" data-nominee="Бытовуха" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/memy.jpg" alt="Бытовуха">
+                            <img src="" alt="нету">
                             <h3>Бытовуха</h3>
                         </div>
                         <div class="nominee-back">
@@ -394,7 +397,7 @@
                     </div>
                     <div class="nominee" data-nominee="биба и боба" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/novosti.jpg" alt="Биба и Боба">
+                            <img src="" alt="нету">
                             <h3>Биба и Боба</h3>
                         </div>
                         <div class="nominee-back">
@@ -402,13 +405,14 @@
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="Кольеретка" data-row="Канал">
+
+                    <div class="nominee" data-nominee="амбассадоры второй традиции" data-row="Канал">
                         <div class="nominee-front">
-                            <img src="photo/channel/iskry.jpg" alt="Кольеретка">
-                            <h3>Кольеретка</h3>
+                            <img src="" alt="нету">
+                            <h3>Амбассадоры второй традиции</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Искры гениальности</div>
+                            <div class="nominee-description">Спорт = жизнь</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
@@ -416,61 +420,68 @@
             </div>
 
             <div class="nomination-frame" data-nomination="Пропажа">
-                <div class="row-title"><center>Пропажа Года</center></div>
+                <div class="nomination-label" data-label="lost">lost</div>
+                <div class="row-title"><center>Пропажа года</center></div>
                 <div class="nominee-subblock">
-                    <div class="nominee" data-nominee="Кобзев" data-row="Пропажа">
+                    <div class="nominee" data-nominee="Эльчин" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propa;a/кобзев.jpg" alt="Кобзев Артем">
-                            <h3>Кобзев Артем</h3>
+                            <img src="photo/ильчин.jpg" alt="Эльчин">
+                            <h3>Караев Эльчин</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Исчез как призрак</div>
-                            <button class="vote-action">Голосовать</button>
-                        </div>
-                    </div>
-                    <div class="nominee" data-nominee="Жданов" data-row="Пропажа">
-                        <div class="nominee-front">
-                            <img src="photo/toxcik/жданов токсик.jpg" alt="Жданов Сергей">
-                            <h3>Жданов Сергей</h3>
-                        </div>
-                        <div class="nominee-back">
-                            <div class="nominee-description">Куда он делся?</div>
+                            <div class="nominee-description">Где же ты был?</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
                     <div class="nominee" data-nominee="Ролдугин" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propa;a/ролдугин.jpg" alt="Ролдугин Никита">
+                            <img src="photo/ролдугин.jpg" alt="">
                             <h3>Ролдугин Никита</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Пропал без вести</div>
+                            <div class="nominee-description">Исчез без следа</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
-                    <div class="nominee" data-nominee="Эльчин" data-row="Пропажа">
+                    <div class="nominee" data-nominee="Кобзев" data-row="Пропажа">
                         <div class="nominee-front">
-                            <img src="photo/propa;a/караев.jpg" alt="Караев Эльчин">
-                            <h3>Караев Эльчин</h3>
+                            <img src="photo/кобзев.jpg" alt="">
+                            <h3>Кобзев Артем</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Растворился в воздухе</div>
+                            <div class="nominee-description">Пропал с радаров</div>
+                            <button class="vote-action">Голосовать</button>
+                        </div>
+                    </div>
+                    <div class="nominee" data-nominee="Жданов" data-row="Пропажа">
+                        <div class="nominee-front">
+                            <img src="photo/жданов.jpg" alt="">
+                            <h3>Жданов Сергей</h3>
+                        </div>
+                        <div class="nominee-back">
+                            <div class="nominee-description">Где он?</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="voteReminder" class="welcome-text" style="margin-bottom: 20px;">
-                Пожалуйста, проконтролируйте, чтобы ваш голос был учтён во всех номинациях!
+            <div id="voteReminder">
+                <p>Пожалуйста, проголосуйте за все категории!</p>
             </div>
-            <button class="button submit-button" id="submitVotes">Отправить</button>
+            <button id="submitVotes" style="display: none;">Отправить голоса</button>
         </div>
 
         <div id="tab5" class="tab">
-            <h1 id="thankYou" style="display: none;">Спасибо что потратили свое время!</h1>
+            <div id="thankYou" style="display: none;">
+                <h1>Спасибо за голосование!</h1>
+                <p>Ваши голоса успешно отправлены. Приложение закроется через 3 секунды.</p>
+            </div>
         </div>
     </div>
+
+    <audio id="clickSound" src="sounds/click.mp3"></audio>
+    <audio id="transitionSound" src="sounds/transition.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
