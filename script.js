@@ -29,12 +29,12 @@ const checkPassword = document.querySelector('.check-password');
 const voteResults = document.getElementById('voteResults');
 const closeAdmin = document.querySelector('.close-admin');
 let votesData = {};
-let currentChatId = '-4643837010'; // Замените на актуальный chatId
+let currentChatId = '-1002626436094'; // Замените на актуальный chatId
 
 function playSound(sound) {
     if (sound) {
         sound.currentTime = 0;
-        sound.play().catch(error => console.error('Ошибка:', error));
+        sound.play().catch(error => console.error('Ошибка воспроизведения звука:', error));
     }
 }
 
@@ -80,15 +80,6 @@ document.querySelectorAll('.menu-item').forEach(item => {
                 voteResults.style.display = 'none';
                 adminPassword.value = '';
                 adminPassword.placeholder = 'Введите пароль';
-                console.log('Состояние элементов внутри админ-панели:');
-                console.log('adminPassword:', adminPassword, 'display:', adminPassword.style.display);
-                console.log('checkPassword:', checkPassword, 'display:', checkPassword.style.display);
-                console.log('voteResults:', voteResults, 'display:', voteResults.style.display);
-                console.log('closeAdmin:', closeAdmin, 'display:', closeAdmin.style.display);
-                console.log('Состояние infoPanel:', infoPanel.style.display);
-                console.log('Состояние container:', document.querySelector('.container').style);
-            } else {
-                console.error('Админ-панель не найдена!');
             }
             menu.style.display = 'none';
         } else {
@@ -99,8 +90,6 @@ document.querySelectorAll('.menu-item').forEach(item => {
                     : 'Выберите одного номинанта в каждой категории и отправьте голос!';
                 infoPanel.style.display = 'flex';
                 adminPanel.style.display = 'none';
-            } else {
-                console.error('Инфо-панель не найдена!');
             }
             menu.style.display = 'none';
         }
@@ -196,7 +185,7 @@ submitVotes.addEventListener('click', () => {
             })
             .catch(error => {
                 console.error('Ошибка при отправке голосов:', error);
-                alert('Произошла ошибка при отправке голосов. Попробуйте еще раз.');
+                alert('Произошла ошибка при отправке голосов: ' + error.message);
             });
     } else {
         console.error('sendVoteToTelegram не вернул промис:', result);
@@ -211,6 +200,7 @@ function sendVoteToTelegram(userId, username, selectedNominees) {
         .join('\n')}`;
 
     console.log('Отправляемое сообщение:', message);
+    console.log('Текущий chatId:', currentChatId);
 
     const fetchPromise = fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
@@ -219,7 +209,10 @@ function sendVoteToTelegram(userId, username, selectedNominees) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP ошибка: ${response.status}`);
+            return response.json().then(errorData => {
+                console.log('Полный ответ от Telegram при ошибке:', errorData);
+                throw new Error(`HTTP ошибка: ${response.status}, Описание: ${errorData.description}`);
+            });
         }
         return response.json();
     })
@@ -234,28 +227,40 @@ function sendVoteToTelegram(userId, username, selectedNominees) {
             });
             return data;
         } else {
-            if (data.description.includes('group chat was upgraded to a supergroup chat') && data.parameters?.migrate_to_chat_id) {
-                console.log('Чат обновлен, новый chatId:', data.parameters.migrate_to_chat_id);
-                currentChatId = data.parameters.migrate_to_chat_id;
-                return fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: currentChatId, text: message })
-                })
-                .then(response => response.json())
-                .then(retryData => {
-                    if (retryData.ok) {
-                        if (!votesData) votesData = {};
-                        Object.entries(selectedNominees).forEach(([row, nominee]) => {
-                            if (!votesData[row]) votesData[row] = {};
-                            if (!votesData[row][nominee]) votesData[row][nominee] = [];
-                            votesData[row][nominee].push(username);
-                        });
-                        return retryData;
-                    } else {
-                        throw new Error('Telegram API вернул ошибку при повторном запросе: ' + retryData.description);
-                    }
-                });
+            if (data.description.includes('group chat was upgraded to a supergroup chat')) {
+                if (data.parameters?.migrate_to_chat_id) {
+                    console.log('Чат обновлен, новый chatId:', data.parameters.migrate_to_chat_id);
+                    currentChatId = data.parameters.migrate_to_chat_id;
+                    return fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: currentChatId, text: message })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(errorData => {
+                                throw new Error(`HTTP ошибка при повторном запросе: ${response.status}, Описание: ${errorData.description}`);
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(retryData => {
+                        console.log('Ответ от Telegram после повторного запроса:', retryData);
+                        if (retryData.ok) {
+                            if (!votesData) votesData = {};
+                            Object.entries(selectedNominees).forEach(([row, nominee]) => {
+                                if (!votesData[row]) votesData[row] = {};
+                                if (!votesData[row][nominee]) votesData[row][nominee] = [];
+                                votesData[row][nominee].push(username);
+                            });
+                            return retryData;
+                        } else {
+                            throw new Error('Telegram API вернул ошибку при повторном запросе: ' + retryData.description);
+                        }
+                    });
+                } else {
+                    throw new Error('Telegram API не предоставил новый chat_id для супергруппы.');
+                }
             }
             throw new Error('Telegram API вернул ошибку: ' + data.description);
         }
@@ -271,7 +276,7 @@ function sendVoteToTelegram(userId, username, selectedNominees) {
 
 function sendResultsToTelegram() {
     const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
-    const chatId = currentChatId || '-4643837010';
+    const chatId = currentChatId || '-1002626436094';
 
     let resultText = 'Итоги голосования:\n';
     nominationOrder.forEach(nomination => {
@@ -294,7 +299,9 @@ function sendResultsToTelegram() {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP ошибка: ${response.status}`);
+            return response.json().then(errorData => {
+                throw new Error(`HTTP ошибка: ${response.status}, Описание: ${errorData.description}`);
+            });
         }
         return response.json();
     })
@@ -347,4 +354,5 @@ tg.MainButton.onClick(() => {
     playSound(clickSound);
     tg.close();
 });
+
 
