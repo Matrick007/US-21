@@ -25,17 +25,23 @@
         <div class="menu">
             <div class="menu-item" data-info="about">О приложении</div>
             <div class="menu-item" data-info="rules">Правила</div>
+            <div class="menu-item" data-info="admin">Админ</div>
         </div>
         <div class="info-panel">
             <p id="info-text"></p>
             <button class="close-info">Закрыть</button>
+        </div>
+        <div class="admin-panel" style="display: none;">
+            <input type="password" id="adminPassword" placeholder="Введите пароль" style="background: #fff; color: #000;">
+            <button class="check-password" style="background: #ff0000;">Подтвердить</button>
+            <div id="voteResults" style="display: none; background: #000; color: #fff;"></div>
+            <button class="close-admin" style="background: #00ff00;">Закрыть</button>
         </div>
 
         <div id="tab1" class="tab active">
             <h1><center>Добро пожаловать!</center></h1>
             <p class="welcome-text">Мы рады видеть вас здесь!</p>
             <button class="button" id="nextButton">Начать</button>
-
         </div>
 
         <div id="tab3" class="tab">
@@ -46,11 +52,11 @@
                 <div class="nominee-subblock">
                     <div class="nominee" data-nominee="Кирилл" data-row="Токсик">
                         <div class="nominee-front">
-                            <img src="photo/toxcik/литнарович.png" alt="">
+                            <img src="photo/toxcik/литнарович.png" alt="Литнарович Кирилл">
                             <h3>Литнарович Кирилл</h3>
                         </div>
                         <div class="nominee-back">
-                            <div class="nominee-description">Мастер сарказма и мерзких комментариев</div>
+                            <div class="nominee-description">Мастер сарказма и едких комментариев</div>
                             <button class="vote-action">Голосовать</button>
                         </div>
                     </div>
