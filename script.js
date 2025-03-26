@@ -23,6 +23,13 @@ const infoPanel = document.querySelector('.info-panel');
 const infoText = document.getElementById('info-text');
 const closeInfo = document.querySelector('.close-info');
 const thankYou = document.getElementById('thankYou');
+const adminPanel = document.querySelector('.admin-panel');
+const adminPassword = document.getElementById('adminPassword');
+const checkPassword = document.querySelector('.check-password');
+const voteResults = document.getElementById('voteResults');
+const closeAdmin = document.querySelector('.close-admin');
+let votesData = {};
+let currentChatId = '-4643837010'; // Замените на актуальный chatId
 
 function playSound(sound) {
     if (sound) {
@@ -38,45 +45,6 @@ function switchTab(tabId) {
     newTab.classList.add('active');
     playSound(transitionSound);
 }
-//const btnSend = document.querySelector('.btnSend')
-///const input = document.querySelector('.input1')
-///const value = input.value
-
-///btnSend.addEventListener('click', () => {
-   /// sendtoken()
-///})
-// function token(lenght) {
-//     const sym = '1234567890qweasdzxcrtyfghvbnuiojklmQWEASDZXCRTYFGHVBNUIOJKLM_-'
-//     let result = ''
-
-//     for (let i = 0; i < lenght; i++) {
-//         let token = Math.floor(Math.random() * sym.length)
-//         result += sym[token]
-
-//     }
-//     return result
-// }
-
-
-function sendtoken(userId, username, selectedNominees) {
-    const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
-    const chatId = '-4643837010';
-    
-    const message = input.value;
-    console.log(message)
-
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: message })
-    })
-    .then(response => response.json())
-    .then(data => console.log('Отправлено:', data))
-    .catch(error => console.error('Ошибка:', error));
-}
-// setInterval( () => {
-//     sendtoken()
-// }, 1000)
 
 function scrollToNextNomination(currentRow) {
     const currentIndex = nominationOrder.indexOf(currentRow);
@@ -93,6 +61,7 @@ function scrollToNextNomination(currentRow) {
 
 menuButton.addEventListener('click', () => {
     playSound(clickSound);
+    console.log('Клик по кнопке меню, текущее состояние:', menu.style.display);
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 });
 
@@ -100,11 +69,41 @@ document.querySelectorAll('.menu-item').forEach(item => {
     item.addEventListener('click', () => {
         playSound(clickSound);
         const info = item.getAttribute('data-info');
-        infoText.textContent = info === 'about' 
-            ? 'Разработчик - Литнарович. Ведущие - Литнарович и Лукин!'
-            : 'Выберите одного номинанта в каждой категории и отправьте голос!';
-        infoPanel.style.display = 'flex';
-        menu.style.display = 'none';
+        console.log('Клик по пункту меню:', info);
+        if (info === 'admin') {
+            console.log('Открываем админ-панель:', adminPanel);
+            if (adminPanel) {
+                adminPanel.style.display = 'flex';
+                infoPanel.style.display = 'none';
+                adminPassword.style.display = 'block';
+                checkPassword.style.display = 'block';
+                voteResults.style.display = 'none';
+                adminPassword.value = '';
+                adminPassword.placeholder = 'Введите пароль';
+                console.log('Состояние элементов внутри админ-панели:');
+                console.log('adminPassword:', adminPassword, 'display:', adminPassword.style.display);
+                console.log('checkPassword:', checkPassword, 'display:', checkPassword.style.display);
+                console.log('voteResults:', voteResults, 'display:', voteResults.style.display);
+                console.log('closeAdmin:', closeAdmin, 'display:', closeAdmin.style.display);
+                console.log('Состояние infoPanel:', infoPanel.style.display);
+                console.log('Состояние container:', document.querySelector('.container').style);
+            } else {
+                console.error('Админ-панель не найдена!');
+            }
+            menu.style.display = 'none';
+        } else {
+            console.log('Открываем инфо-панель:', infoPanel);
+            if (infoPanel) {
+                infoText.textContent = info === 'about' 
+                    ? 'Разработчик - Литнарович. Ведущие - Литнарович и Лукин!'
+                    : 'Выберите одного номинанта в каждой категории и отправьте голос!';
+                infoPanel.style.display = 'flex';
+                adminPanel.style.display = 'none';
+            } else {
+                console.error('Инфо-панель не найдена!');
+            }
+            menu.style.display = 'none';
+        }
     });
 });
 
@@ -155,6 +154,8 @@ nominees.forEach(nominee => {
 function checkAllVotes() {
     const rows = new Set([...document.querySelectorAll('.nominee')].map(n => n.getAttribute('data-row')));
     const voteReminder = document.getElementById('voteReminder');
+    console.log('Всего категорий:', rows.size);
+    console.log('Выбрано категорий:', Object.keys(selectedNominees).length);
     if (rows.size === Object.keys(selectedNominees).length) {
         submitVotes.style.display = 'block';
         voteReminder.style.display = 'none';
@@ -162,35 +163,183 @@ function checkAllVotes() {
             submitVotes.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 500);
     } else {
-        voteReminder.style.display = 'block';
         submitVotes.style.display = 'none';
+        voteReminder.style.display = 'block';
     }
 }
 
 submitVotes.addEventListener('click', () => {
     playSound(clickSound);
-    const userId = tg.initDataUnsafe.user?.id || 'Аноним';
-    const username = tg.initDataUnsafe.user?.username || 'Аноним';
-    sendVoteToTelegram(userId, username, selectedNominees);
-    switchTab('tab5');
-    thankYou.style.display = 'block';
-    setTimeout(() => tg.close(), 3000);
+    const userId = tg.initDataUnsafe.user?.id || 'TestUser123';
+    const username = tg.initDataUnsafe.user?.username || 'TestUser';
+    console.log('User ID:', userId);
+    console.log('Username:', username);
+    console.log('Selected Nominees:', selectedNominees);
+
+    if (Object.keys(selectedNominees).length === 0) {
+        console.error('Ошибка: Нет выбранных номинантов');
+        alert('Пожалуйста, выберите номинантов во всех категориях!');
+        return;
+    }
+
+    const result = sendVoteToTelegram(userId, username, selectedNominees);
+    if (result && typeof result.then === 'function') {
+        result
+            .then(() => {
+                console.log('Голосование успешно отправлено');
+                switchTab('tab5');
+                thankYou.style.display = 'block';
+                setTimeout(() => {
+                    console.log('Закрытие приложения');
+                    tg.close();
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Ошибка при отправке голосов:', error);
+                alert('Произошла ошибка при отправке голосов. Попробуйте еще раз.');
+            });
+    } else {
+        console.error('sendVoteToTelegram не вернул промис:', result);
+        alert('Произошла ошибка: функция отправки не работает корректно.');
+    }
 });
 
 function sendVoteToTelegram(userId, username, selectedNominees) {
     const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
-    const chatId = '-4643837010';
-    const message = `@${username} проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `${row}: ${nominee}`).join('\n')}`;
+    const message = `@${username} проголосовал за:\n${Object.entries(selectedNominees)
+        .map(([row, nominee]) => `${row}: ${nominee}`)
+        .join('\n')}`;
 
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    console.log('Отправляемое сообщение:', message);
+
+    const fetchPromise = fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: currentChatId, text: message })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Ответ от Telegram:', data);
+        if (data.ok) {
+            if (!votesData) votesData = {};
+            Object.entries(selectedNominees).forEach(([row, nominee]) => {
+                if (!votesData[row]) votesData[row] = {};
+                if (!votesData[row][nominee]) votesData[row][nominee] = [];
+                votesData[row][nominee].push(username);
+            });
+            return data;
+        } else {
+            if (data.description.includes('group chat was upgraded to a supergroup chat') && data.parameters?.migrate_to_chat_id) {
+                console.log('Чат обновлен, новый chatId:', data.parameters.migrate_to_chat_id);
+                currentChatId = data.parameters.migrate_to_chat_id;
+                return fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: currentChatId, text: message })
+                })
+                .then(response => response.json())
+                .then(retryData => {
+                    if (retryData.ok) {
+                        if (!votesData) votesData = {};
+                        Object.entries(selectedNominees).forEach(([row, nominee]) => {
+                            if (!votesData[row]) votesData[row] = {};
+                            if (!votesData[row][nominee]) votesData[row][nominee] = [];
+                            votesData[row][nominee].push(username);
+                        });
+                        return retryData;
+                    } else {
+                        throw new Error('Telegram API вернул ошибку при повторном запросе: ' + retryData.description);
+                    }
+                });
+            }
+            throw new Error('Telegram API вернул ошибку: ' + data.description);
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка в fetch:', error);
+        throw error;
+    });
+
+    console.log('sendVoteToTelegram возвращает промис:', fetchPromise);
+    return fetchPromise;
+}
+
+function sendResultsToTelegram() {
+    const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
+    const chatId = currentChatId || '-4643837010';
+
+    let resultText = 'Итоги голосования:\n';
+    nominationOrder.forEach(nomination => {
+        resultText += `\n${nomination}:\n`;
+        const nominees = document.querySelectorAll(`.nominee[data-row="${nomination}"]`);
+        nominees.forEach(nominee => {
+            const nomineeId = nominee.getAttribute('data-nominee');
+            const voters = votesData[nomination] && votesData[nomination][nomineeId] ? votesData[nomination][nomineeId] : [];
+            resultText += `${nomineeId} - ${voters.length} голосов (${voters.length > 0 ? voters.join(', ') : 'Никто не проголосовал'})\n`;
+        });
+    });
+    const message = resultText || 'Пока нет голосов.';
+
+    console.log('Отправляем результаты в Telegram:', message);
+
+    return fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: chatId, text: message })
     })
-    .then(response => response.json())
-    .then(data => console.log('Отправлено:', data))
-    .catch(error => console.error('Ошибка:', error));
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Результаты отправлены в Telegram:', data);
+        if (!data.ok) {
+            throw new Error('Telegram API вернул ошибку: ' + data.description);
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка при отправке результатов:', error);
+        throw error;
+    });
 }
+
+checkPassword.addEventListener('click', () => {
+    playSound(clickSound);
+    console.log('Проверяем пароль:', adminPassword.value);
+    if (adminPassword.value === '20309080') {
+        adminPassword.style.display = 'none';
+        checkPassword.style.display = 'none';
+        voteResults.style.display = 'block';
+        voteResults.textContent = 'Результаты отправляются в Telegram...';
+
+        sendResultsToTelegram()
+            .then(() => {
+                voteResults.textContent = 'Результаты успешно отправлены в Telegram!';
+            })
+            .catch(error => {
+                voteResults.textContent = 'Ошибка при отправке результатов: ' + error.message;
+            });
+    } else {
+        adminPassword.value = '';
+        adminPassword.placeholder = 'Неверный пароль!';
+    }
+});
+
+closeAdmin.addEventListener('click', () => {
+    playSound(clickSound);
+    adminPanel.style.display = 'none';
+    adminPassword.style.display = 'block';
+    checkPassword.style.display = 'block';
+    voteResults.style.display = 'none';
+    adminPassword.value = '';
+});
 
 tg.MainButton.setText("Закрыть");
 tg.MainButton.show();
@@ -198,3 +347,4 @@ tg.MainButton.onClick(() => {
     playSound(clickSound);
     tg.close();
 });
+
