@@ -15,7 +15,7 @@ html, body {
 
 body {
     font-family: 'Orbitron', sans-serif;
-    background: #05051a;
+    background: #0a0a23;
     color: #fff;
     position: fixed;
     width: 100%;
@@ -25,17 +25,13 @@ body {
 
 .background {
     position: fixed;
-    top: -40%;
-    left: -40%;
-    width: 180%;
-    height: 180%;
-    background: radial-gradient(circle at center, rgba(50, 50, 100, 0.85) 0%, #05051a 45%);
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle at center, #1e1e3f 0%, #0a0a23 70%);
     z-index: -3;
-    animation: cosmicVortex 30s infinite ease-in-out, rotateVortex 60s linear infinite;
-    filter: blur(4px);
-    opacity: 0.9;
-    background-image: radial-gradient(circle, rgba(155, 89, 255, 0.3) 1px, transparent 1px);
-    background-size: 20px 20px;
+    animation: backgroundPulse 15s infinite ease-in-out, rotateBackground 30s linear infinite;
 }
 
 .particles {
@@ -44,51 +40,49 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="5%" cy="10%" r="6" fill="#a970ff" opacity="0.9"><animate attributeName="r" values="6;8;6" dur="3s" repeatCount="indefinite"/><animate attributeName="cy" values="10%;15%;10%" dur="6s" repeatCount="indefinite"/></circle><circle cx="45%" cy="65%" r="5" fill="#ff5ca1" opacity="0.85"><animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/><animate attributeName="cx" values="45%;50%;45%" dur="5s" repeatCount="indefinite"/></circle><circle cx="85%" cy="20%" r="5.5" fill="#00faff" opacity="0.95"><animate attributeName="r" values="5.5;7.5;5.5" dur="4s" repeatCount="indefinite"/><animate attributeName="cy" values="20%;25%;20%" dur="7s" repeatCount="indefinite"/></circle><circle cx="95%" cy="90%" r="4" fill="#a970ff" opacity="0.8"><animate attributeName="r" values="4;6;4" dur="3s" repeatCount="indefinite"/><animate attributeName="cx" values="95%;90%;95%" dur="6s" repeatCount="indefinite"/></circle><circle cx="65%" cy="55%" r="5" fill="#ff5ca1" opacity="0.9"><animate attributeName="r" values="5;7;5" dur="3.5s" repeatCount="indefinite"/><animate attributeName="cy" values="55%;60%;55%" dur="5s" repeatCount="indefinite"/></circle></svg>');
-    animation: starfieldDrift 35s infinite ease-in-out, starfieldGlimmer 2.5s infinite;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="10%" cy="20%" r="3" fill="#6b48ff" opacity="0.8"><animate attributeName="r" values="3;5;3" dur="4s" repeatCount="indefinite"/></circle><circle cx="30%" cy="50%" r="2" fill="#ff2e63" opacity="0.7"><animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"/></circle><circle cx="70%" cy="30%" r="2.5" fill="#00d4ff" opacity="0.9"><animate attributeName="r" values="2.5;4.5;2.5" dur="5s" repeatCount="indefinite"/></circle><circle cx="90%" cy="80%" r="1.5" fill="#6b48ff" opacity="0.6"><animate attributeName="r" values="1.5;3;1.5" dur="3.5s" repeatCount="indefinite"/></circle><circle cx="50%" cy="40%" r="2" fill="#ff2e63" opacity="0.8"><animate attributeName="r" values="2;3.5;2" dur="4.5s" repeatCount="indefinite"/></circle></svg>');
+    animation: particleDrift 20s infinite ease-in-out, particleFade 5s infinite;
     z-index: -2;
-    mix-blend-mode: soft-light;
-    filter: brightness(1.2);
+    mix-blend-mode: screen;
 }
 
 .glow-effect {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 1400px;
-    height: 1400px;
-    background: radial-gradient(circle, rgba(169, 112, 255, 0.75) 0%, transparent 55%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(107, 72, 255, 0.5), transparent 70%);
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    filter: blur(220px);
-    animation: nebulaPulse 12s infinite ease-in-out, nebulaSpin 25s linear infinite;
+    filter: blur(150px);
+    animation: glowEpic 6s infinite ease-in-out, rotateGlow 12s linear infinite;
     z-index: -1;
-    box-shadow: 0 0 120px rgba(169, 112, 255, 0.6), 0 0 200px rgba(255, 92, 161, 0.4);
 }
 
 .container {
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: 30px;
-    background: linear-gradient(145deg, rgba(10, 10, 40, 0.92), rgba(25, 25, 75, 0.88));
+    padding: 15px;
+    background: rgba(15, 15, 35, 0.95);
     border-radius: 0;
-    backdrop-filter: blur(40px);
-    box-shadow: inset 0 0 60px rgba(169, 112, 255, 0.6), 0 0 100px rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(25px);
+    box-shadow: inset 0 0 25px rgba(107, 72, 255, 0.3);
     position: relative;
     z-index: 1;
     overflow: hidden;
-    border: 6px solid rgba(169, 112, 255, 0.95);
-    animation: etherealEntrance 3s ease-out;
+    border: 3px solid rgba(107, 72, 255, 0.7);
+    animation: containerEntrance 1.5s ease-out;
 }
 
 .menu-button {
     position: absolute;
-    top: 35px;
-    right: 35px;
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(145deg, #a970ff, #ff5ca1, #00faff);
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, #6b48ff, #ff2e63);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -96,51 +90,37 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: quasarPulse 3.5s infinite;
-    box-shadow: 0 0 30px rgba(169, 112, 255, 1), 0 0 50px rgba(255, 92, 161, 0.8);
-    transition: transform 0.3s ease;
-}
-
-.menu-button:hover {
-    transform: scale(1.1) rotate(15deg);
+    animation: pulse 2s infinite;
 }
 
 .menu-button::before {
     content: "☰";
     color: #fff;
-    font-size: 36px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+    font-size: 24px;
 }
 
 .menu {
     position: absolute;
-    top: 120px;
-    right: 35px;
-    background: linear-gradient(145deg, rgba(25, 25, 60, 0.95), rgba(45, 45, 100, 0.9));
-    border-radius: 30px;
-    padding: 25px;
+    top: 70px;
+    right: 20px;
+    background: rgba(25, 25, 50, 0.95);
+    border-radius: 15px;
+    padding: 10px;
     display: none;
     z-index: 11;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
-    border: 4px solid rgba(169, 112, 255, 0.8);
-    animation: menuAscend 0.7s ease-out;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .menu-item {
-    padding: 18px 35px;
+    padding: 10px 20px;
     color: #fff;
     cursor: pointer;
-    font-size: 1.3rem;
-    transition: all 0.5s ease;
-    border-radius: 20px;
-    background: linear-gradient(90deg, rgba(169, 112, 255, 0.25), transparent);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    transition: background 0.3s;
 }
 
 .menu-item:hover {
-    background: linear-gradient(90deg, #a970ff, #ff5ca1);
-    transform: translateX(10px) scale(1.05);
-    box-shadow: 0 0 25px rgba(169, 112, 255, 1);
+    background: rgba(107, 72, 255, 0.5);
 }
 
 .info-panel {
@@ -149,82 +129,66 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(145deg, rgba(10, 10, 40, 0.98), rgba(25, 25, 75, 0.92));
+    background: rgba(15, 15, 35, 0.98);
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 12;
-    padding: 50px;
+    padding: 20px;
     text-align: center;
-    animation: cosmicSlide 0.9s ease-out;
-    border: 5px solid rgba(169, 112, 255, 0.9);
-    box-shadow: inset 0 0 40px rgba(169, 112, 255, 0.5);
 }
 
 .info-panel p {
-    font-size: 1.5rem;
-    margin-bottom: 35px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
-    background: linear-gradient(90deg, #ff5ca1, #00faff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: textShimmer 4s infinite;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
 }
 
 .close-info {
-    padding: 18px 35px;
-    background: linear-gradient(145deg, #ff5ca1, #a970ff);
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #ff2e63, #6b48ff);
     border: none;
-    border-radius: 70px;
+    border-radius: 50px;
     color: #fff;
-    font-size: 1.3rem;
+    font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 0 25px rgba(169, 112, 255, 1);
-    transition: all 0.5s ease;
-}
-
-.close-info:hover {
-    transform: scale(1.15) rotate(10deg);
-    box-shadow: 0 0 35px rgba(169, 112, 255, 1), 0 0 50px rgba(255, 92, 161, 0.9);
 }
 
 h1 {
-    font-size: 4.5rem;
+    font-size: 3rem;
     font-weight: 900;
-    margin-bottom: 45px;
-    background: linear-gradient(90deg, #a970ff, #ff5ca1, #00faff);
+    margin-bottom: 30px;
+    background: linear-gradient(90deg, #6b48ff, #ff2e63, #00d4ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 60px rgba(169, 112, 255, 1), 0 0 30px rgba(255, 92, 161, 0.9);
-    animation: celestialGlow 6s infinite alternate;
+    text-shadow: 0 0 30px rgba(107, 72, 255, 0.9);
+    animation: textGlow 3s infinite alternate;
 }
 
 .welcome-text {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.98);
-    text-shadow: 0 0 30px rgba(169, 112, 255, 0.9);
-    animation: textAscend 3.5s infinite ease-in-out;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 15px rgba(107, 72, 255, 0.6);
 }
 
 .button {
-    padding: 25px 60px;
-    background: linear-gradient(145deg, #a970ff, #ff5ca1, #00faff);
+    padding: 18px 40px;
+    background: linear-gradient(45deg, #6b48ff, #ff2e63, #00d4ff);
     color: #fff;
     border: none;
-    border-radius: 90px;
-    font-size: 1.7rem;
+    border-radius: 60px;
+    font-size: 1.4rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.6s ease;
-    box-shadow: 0 30px 70px rgba(169, 112, 255, 1), 0 0 50px rgba(255, 92, 161, 0.8);
-    animation: supernovaGlow 4s infinite;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7);
+    animation: buttonPulse 2s infinite;
 }
 
 .button:hover {
-    transform: scale(1.25) rotate(5deg);
-    box-shadow: 0 40px 80px rgba(169, 112, 255, 1), 0 0 60px rgba(255, 92, 161, 1);
+    transform: scale(1.1);
+    box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9);
 }
 
 .tab {
@@ -238,155 +202,150 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    animation: tabAscend 1.5s ease-out forwards;
+    animation: tabTransitionIn 0.8s ease-out forwards;
 }
 
 #tab3 {
     justify-content: flex-start;
-    padding-top: 35px;
+    padding-top: 20px;
     overflow-y: auto;
 }
 
 .nomination-frame {
-    background: linear-gradient(145deg, rgba(15, 15, 50, 0.95), rgba(30, 30, 80, 0.9));
-    border: 5px solid rgba(169, 112, 255, 1);
-    border-radius: 30px;
-    padding: 35px;
-    margin-bottom: 40px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(169, 112, 255, 0.5);
+    background: rgba(20, 20, 40, 0.9);
+    border: 2px solid rgba(107, 72, 255, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
     width: 100%;
     position: relative;
-    animation: frameAscend 1.5s ease-out;
 }
 
 .nomination-banner {
     position: absolute;
-    top: -30px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(145deg, #00ff00, #32cd32);
+    background: linear-gradient(45deg, #66fa66, #7ee7d0); 
     color: #1e1e3f;
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 700;
-    padding: 10px 30px;
-    border-radius: 35px;
-    box-shadow: 0 10px 30px rgba(0, 255, 0, 1);
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 255, 0, 0.7);
     z-index: 2;
-    animation: bannerRadiance 3.5s infinite alternate;
+    animation: nominationGlow 2s infinite alternate;
 }
 
 .nomination-frame[data-nomination="Оператор"] .nomination-banner {
-    background: linear-gradient(145deg, #00b7eb, #00faff);
-    box-shadow: 0 10px 30px rgba(0, 183, 235, 1);
+    background: linear-gradient(45deg, #00b7eb, #00d4ff); 
+    box-shadow: 0 5px 15px rgba(0, 183, 235, 0.7);
 }
 
 .nomination-frame[data-nomination="Пара"] .nomination-banner {
-    background: linear-gradient(145deg, #ff69b4, #ff1493);
-    box-shadow: 0 10px 30px rgba(255, 105, 180, 1);
+    background: linear-gradient(45deg, #ff69b4, #ff1493); 
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.7);
 }
 
 .nomination-frame[data-nomination="Прорыв"] .nomination-banner {
-    background: linear-gradient(145deg, #ffa500, #ff4500);
-    box-shadow: 0 10px 30px rgba(255, 165, 0, 1);
+    background: linear-gradient(45deg, #ffa500, #ff4500); 
+    box-shadow: 0 5px 15px rgba(255, 165, 0, 0.7);
 }
 
 .nomination-frame[data-nomination="Спокойный"] .nomination-banner {
-    background: linear-gradient(145deg, #87ceeb, #4682b4);
-    box-shadow: 0 10px 30px rgba(135, 206, 235, 1);
+    background: linear-gradient(45deg, #87ceeb, #4682b4); 
+    box-shadow: 0 5px 15px rgba(135, 206, 235, 0.7);
 }
 
 .nomination-frame[data-nomination="Воздухан"] .nomination-banner {
-    background: linear-gradient(145deg, #e0ffff, #b0e0e6);
-    box-shadow: 0 10px 30px rgba(224, 255, 255, 1);
+    background: linear-gradient(45deg, #e0ffff, #b0e0e6); 
+    box-shadow: 0 5px 15px rgba(224, 255, 255, 0.7);
 }
 
 .nomination-frame[data-nomination="Мем"] .nomination-banner {
-    background: linear-gradient(145deg, #ffff00, #ffd700);
-    box-shadow: 0 10px 30px rgba(255, 255, 0, 1);
+    background: linear-gradient(45deg, #ffff00, #ffd700); 
+    box-shadow: 0 5px 15px rgba(255, 255, 0, 0.7);
 }
 
 .nomination-frame[data-nomination="Канал"] .nomination-banner {
-    background: linear-gradient(145deg, #ffffff, #d3d3d3);
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 1);
+    background: linear-gradient(45deg, #ffffff, #d3d3d3); 
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.7);
 }
 
 .nomination-frame[data-nomination="Пропажа"] .nomination-banner {
-    background: linear-gradient(145deg, #800080, #4b0082);
-    box-shadow: 0 10px 30px rgba(128, 0, 128, 1);
+    background: linear-gradient(45deg, #800080, #4b0082); 
+    box-shadow: 0 5px 15px rgba(128, 0, 128, 0.7);
 }
 
 .nomination-title {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 900;
     text-align: center;
-    margin-bottom: 25px;
-    background: linear-gradient(90deg, #ff5ca1, #a970ff, #00faff);
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #ff2e63, #6b48ff, #00d4ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 35px rgba(169, 112, 255, 1);
-    animation: celestialGlow 5s infinite alternate;
+    text-shadow: 0 0 20px rgba(107, 72, 255, 0.8);
+    animation: textGlow 3s infinite alternate;
 }
 
 .winner-banner {
     position: absolute;
-    top: -30px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(145deg, #ffd700, #ff8c00);
+    background: linear-gradient(45deg, #ffd700, #ff8c00);
     color: #1e1e3f;
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 700;
-    padding: 10px 30px;
-    border-radius: 35px;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 1);
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.7);
     z-index: 2;
-    animation: winnerEclipse 3.5s infinite alternate;
+    animation: winnerGlow 2s infinite alternate;
 }
 
 .winner {
-    border: 6px solid #ffd700;
-    box-shadow: 0 0 50px rgba(255, 215, 0, 1), inset 0 0 20px rgba(255, 215, 0, 0.6);
-    background: linear-gradient(145deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.15));
+    border: 3px solid hsl(51, 95%, 86%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
 }
 
 .row-title {
-    font-size: 2.8rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 35px;
-    background: linear-gradient(90deg, #ff5ca1, #a970ff);
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #ff2e63, #6b48ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(169, 112, 255, 0.9);
 }
 
 .nominee-subblock {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 15px;
     justify-content: center;
 }
 
 .nominee {
-    background: linear-gradient(145deg, rgba(20, 20, 60, 0.95), rgba(40, 40, 90, 0.9));
-    border-radius: 35px;
-    padding: 30px;
+    background: rgba(25, 25, 50, 0.9);
+    border-radius: 20px;
+    padding: 15px;
     text-align: center;
-    transition: all 0.6s ease;
+    transition: transform 0.3s ease;
     cursor: pointer;
-    border: 5px solid rgba(169, 112, 255, 0.8);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-    flex: 0 0 calc(50% - 30px);
-    min-height: 320px;
+    border: 2px solid rgba(107, 72, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    flex: 0 0 calc(50% - 15px);
+    min-height: 260px;
     position: relative;
-    perspective: 2000px;
-    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
 .nominee:hover,
 .nominee.active {
-    transform: scale(1.12) rotateX(5deg) rotateY(5deg);
-    border-color: rgba(169, 112, 255, 1);
-    box-shadow: 0 25px 60px rgba(169, 112, 255, 1), 0 0 40px rgba(255, 92, 161, 0.9);
+    transform: scale(1.05);
+    border-color: rgba(107, 72, 255, 1);
 }
 
 .nominee-front, .nominee-back {
@@ -396,203 +355,147 @@ h1 {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    transition: transform 0.9s ease;
+    transition: transform 0.6s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 35px;
-    transform-style: preserve-3d;
 }
 
 .nominee-front {
-    transform: rotateY(0deg) translateZ(20px);
+    transform: rotateY(0deg);
 }
 
 .nominee-back {
-    transform: rotateY(180deg) translateZ(20px);
-    background: linear-gradient(145deg, rgba(30, 30, 70, 0.95), rgba(50, 50, 100, 0.9));
-    box-shadow: inset 0 0 25px rgba(169, 112, 255, 0.5);
+    transform: rotateY(180deg);
+    background: rgba(25, 25, 50, 0.9);
 }
 
 .nominee.flipped .nominee-front {
-    transform: rotateY(-180deg) translateZ(20px);
+    transform: rotateY(-180deg);
 }
 
 .nominee.flipped .nominee-back {
-    transform: rotateY(0deg) translateZ(20px);
+    transform: rotateY(0deg);
 }
 
 .nominee img {
     width: 100%;
-    max-width: 200px;
+    max-width: 140px;
     height: auto;
-    border-radius: 30px;
-    margin-bottom: 25px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-    transition: transform 0.4s ease;
-}
-
-.nominee:hover img {
-    transform: scale(1.1) rotate(3deg);
+    border-radius: 15px;
+    margin-bottom: 10px;
 }
 
 .nominee h3 {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #fff;
-    padding: 0 12px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+    padding: 0 5px;
 }
 
 .nominee-description {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.97);
-    padding: 0 12px;
-    margin-bottom: 25px;
-    text-shadow: 0 0 15px rgba(169, 112, 255, 0.6);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0 5px;
+    margin-bottom: 10px;
 }
 
 .vote-action {
-    padding: 18px 35px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 70px;
-    font-size: 1.3rem;
+    border-radius: 40px;
+    font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
     color: #fff;
-    background: linear-gradient(145deg, #ff5ca1, #a970ff);
-    box-shadow: 0 15px 35px rgba(169, 112, 255, 1);
-    transition: all 0.5s ease;
-}
-
-.vote-action:hover {
-    transform: scale(1.2) rotate(5deg);
-    box-shadow: 0 20px 45px rgba(169, 112, 255, 1), 0 0 30px rgba(255, 92, 161, 0.9);
+    background: linear-gradient(45deg, #ff2e63, #6b48ff);
+    box-shadow: 0 8px 20px rgba(107, 72, 255, 0.7);
 }
 
 .submit-button {
-    margin: 70px auto;
+    margin: 40px auto;
     display: none;
-    width: 95%;
-    max-width: 500px;
+    width: 80%;
+    max-width: 350px;
 }
 
-/* Animations */
-@keyframes cosmicVortex {
-    0% { transform: scale(1); opacity: 0.85; }
-    50% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.85; }
+@keyframes containerEntrance {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-@keyframes rotateVortex {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes textGlow {
+    0% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9); }
+    50% { text-shadow: 0 0 40px rgba(107, 72, 255, 1); }
+    100% { text-shadow: 0 0 30px rgba(107, 72, 255, 0.9); }
 }
 
-@keyframes starfieldDrift {
+@keyframes particleDrift {
     0% { transform: translate(0, 0); }
-    25% { transform: translate(-70px, -90px); }
-    50% { transform: translate(60px, -60px); }
-    75% { transform: translate(-50px, 70px); }
+    25% { transform: translate(-40px, -60px); }
+    50% { transform: translate(30px, -30px); }
+    75% { transform: translate(-20px, 40px); }
     100% { transform: translate(0, 0); }
 }
 
-@keyframes starfieldGlimmer {
-    0% { opacity: 0.75; }
+@keyframes particleFade {
+    0% { opacity: 0.85; }
     50% { opacity: 1; }
-    100% { opacity: 0.75; }
+    100% { opacity: 0.85; }
 }
 
-@keyframes nebulaPulse {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.75; }
-    50% { transform: translate(-50%, -50%) scale(1.6); opacity: 0.95; }
-    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.75; }
+@keyframes glowEpic {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
 }
 
-@keyframes nebulaSpin {
+@keyframes rotateGlow {
     from { transform: translate(-50%, -50%) rotate(0deg); }
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-@keyframes etherealEntrance {
-    0% { transform: scale(0.5) rotate(10deg); opacity: 0; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+@keyframes rotateBackground {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-@keyframes celestialGlow {
-    0% { text-shadow: 0 0 50px rgba(169, 112, 255, 1), 0 0 25px rgba(255, 92, 161, 0.9); }
-    50% { text-shadow: 0 0 70px rgba(169, 112, 255, 1), 0 0 35px rgba(255, 92, 161, 1); }
-    100% { text-shadow: 0 0 50px rgba(169, 112, 255, 1), 0 0 25px rgba(255, 92, 161, 0.9); }
+@keyframes buttonPulse {
+    0% { box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7); }
+    50% { box-shadow: 0 20px 50px rgba(107, 72, 255, 0.9); }
+    100% { box-shadow: 0 15px 40px rgba(107, 72, 255, 0.7); }
 }
 
-@keyframes textAscend {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0); }
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(107, 72, 255, 0.7); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(107, 72, 255, 1); }
+    100% { transform: scale(1); box-shadow: 0 0 10px rgba(107, 72, 255, 0.7); }
 }
 
-@keyframes supernovaGlow {
-    0% { box-shadow: 0 30px 70px rgba(169, 112, 255, 1), 0 0 50px rgba(255, 92, 161, 0.8); }
-    50% { box-shadow: 0 40px 80px rgba(169, 112, 255, 1), 0 0 60px rgba(255, 92, 161, 1); }
-    100% { box-shadow: 0 30px 70px rgba(169, 112, 255, 1), 0 0 50px rgba(255, 92, 161, 0.8); }
+@keyframes winnerGlow {
+    0% { box-shadow: 0 5px 15px rgba(255, 215, 0, 0.7); }
+    100% { box-shadow: 0 5px 25px rgba(255, 215, 0, 1); }
 }
 
-@keyframes quasarPulse {
-    0% { transform: scale(1); box-shadow: 0 0 25px rgba(169, 112, 255, 1), 0 0 40px rgba(255, 92, 161, 0.8); }
-    50% { transform: scale(1.25); box-shadow: 0 0 35px rgba(169, 112, 255, 1), 0 0 50px rgba(255, 92, 161, 1); }
-    100% { transform: scale(1); box-shadow: 0 0 25px rgba(169, 112, 255, 1), 0 0 40px rgba(255, 92, 161, 0.8); }
-}
-
-@keyframes menuAscend {
-    0% { opacity: 0; transform: translateY(-40px) rotateX(20deg); }
-    100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
-}
-
-@keyframes cosmicSlide {
-    0% { transform: translateY(100%) rotateX(30deg); opacity: 0; }
-    100% { transform: translateY(0) rotateX(0deg); opacity: 1; }
-}
-
-@keyframes textShimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes tabAscend {
-    0% { opacity: 0; transform: translateY(50px) rotateX(15deg); }
-    100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
-}
-
-@keyframes frameAscend {
-    0% { opacity: 0; transform: translateY(70px) rotateX(10deg); }
-    100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
-}
-
-@keyframes bannerRadiance {
-    0% { box-shadow: 0 10px 30px rgba(0, 255, 0, 1); }
-    100% { box-shadow: 0 10px 40px rgba(0, 255, 0, 1); }
-}
-
-@keyframes winnerEclipse {
-    0% { box-shadow: 0 10px 30px rgba(255, 215, 0, 1); }
-    100% { box-shadow: 0 10px 40px rgba(255, 215, 0, 1); }
+@keyframes nominationGlow {
+    0% { box-shadow: 0 5px 15px rgba(0, 255, 0, 0.7); }
+    100% { box-shadow: 0 5px 25px rgba(0, 255, 0, 1); }
 }
 
 @media (max-width: 480px) {
-    h1 { font-size: 3.5rem; }
-    .welcome-text { font-size: 1.6rem; }
-    .button { font-size: 1.4rem; padding: 20px 45px; }
-    .row-title { font-size: 2.2rem; }
-    .nomination-title { font-size: 1.9rem; }
+    h1 { font-size: 2rem; }
+    .welcome-text { font-size: 1.1rem; }
+    .button { font-size: 1.1rem; padding: 12px 25px; }
+    .row-title { font-size: 1.8rem; }
+    .nomination-title { font-size: 1.5rem; }
     .nominee { 
-        flex: 0 0 calc(50% - 30px); 
-        min-height: 300px;
+        flex: 0 0 calc(50% - 15px); 
+        min-height: 240px;
     }
-    .nominee img { max-width: 180px; }
-    .nominee h3 { font-size: 1.3rem; }
-    .nominee-description { font-size: 1rem; }
-    .vote-action { font-size: 1.1rem; padding: 15px 30px; }
-    .winner-banner, .nomination-banner { font-size: 1.1rem; padding: 8px 25px; }
+    .nominee img { max-width: 120px; }
+    .nominee h3 { font-size: 1rem; }
+    .nominee-description { font-size: 0.8rem; }
+    .vote-action { font-size: 0.9rem; padding: 8px 15px; }
+    .winner-banner, .nomination-banner { font-size: 0.9rem; padding: 4px 12px; }
 }
