@@ -36,6 +36,39 @@ const infoText = document.getElementById('info-text');
 const closeInfo = document.querySelector('.close-info');
 const thankYou = document.getElementById('thankYou');
 
+// Function to check if user has voted
+function hasUserVoted() {
+    const userId = tg.initDataUnsafe.user?.id || 'anonymous';
+    const voteKey = `vote_${userId}`;
+    return localStorage.getItem(voteKey) === 'true';
+}
+
+// Function to mark user as having voted
+function markUserVoted() {
+    const userId = tg.initDataUnsafe.user?.id || 'anonymous';
+    const voteKey = `vote_${userId}`;
+    localStorage.setItem(voteKey, 'true');
+}
+
+// Disable voting UI if user has already voted
+function disableVotingUI() {
+    document.querySelectorAll('.nominee').forEach(nominee => {
+        nominee.style.pointerEvents = 'none';
+        nominee.style.opacity = '0.5';
+    });
+    submitVotes.style.display = 'none';
+    nextButton.style.display = 'none';
+    infoText.textContent = 'Вы уже проголосовали!';
+    infoPanel.style.display = 'flex';
+}
+
+// Check voting status on app load
+if (hasUserVoted()) {
+    disableVotingUI();
+    switchTab('tab5'); // Show thank you tab
+    thankYou.style.display = 'block';
+}
+
 function playSound(sound) {
     if (sound) {
         sound.currentTime = 0;
@@ -170,9 +203,22 @@ function checkAllVotes() {
 
 submitVotes.addEventListener('click', () => {
     playSound(clickSound);
+    if (hasUserVoted()) {
+        infoText.textContent = 'Вы уже проголосовали!';
+        infoPanel.style.display = 'flex';
+        return;
+    }
+
     const userId = tg.initDataUnsafe.user?.id || 'Аноним';
     const username = tg.initDataUnsafe.user?.username || 'Аноним';
+    
+    // Mark user as voted
+    markUserVoted();
+    
+    // Send vote to Telegram
     sendVoteToTelegram(userId, username, selectedNominees);
+    
+    // Show thank you screen and close
     switchTab('tab5');
     thankYou.style.display = 'block';
     setTimeout(() => tg.close(), 3000);
@@ -190,7 +236,11 @@ function sendVoteToTelegram(userId, username, selectedNominees) {
     })
     .then(response => response.json())
     .then(data => console.log('Голос успешно отправлен:', data))
-    .catch(error => console.error('Ошибка отправки голоса:', error));
+    .catch(error => {
+        console.error('Ошибка отправки голоса:', error);
+        infoText.textContent = 'Ошибка при отправке голоса. Попробуйте позже.';
+        infoPanel.style.display = 'flex';
+    });
 }
 
 tg.MainButton.setText("Закрыть");
