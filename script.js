@@ -36,7 +36,37 @@ const infoText = document.getElementById('info-text');
 const closeInfo = document.querySelector('.close-info');
 const thankYou = document.getElementById('thankYou');
 
-// Function to check if user has voted
+// In-memory store for IP addresses (resets on app restart)
+const votedIPs = new Set();
+
+// Function to get client IP using a public API
+async function getClientIP() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error('Ошибка получения IP:', error);
+        return null;
+    }
+}
+
+// Function to check if IP has voted
+async function hasIPVoted() {
+    const ip = await getClientIP();
+    if (!ip) return false;
+    return votedIPs.has(ip);
+}
+
+// Function to mark IP as voted
+async function markIPVoted() {
+    const ip = await getClientIP();
+    if (ip) {
+        votedIPs.add(ip);
+    }
+}
+
+// Function to check if user has voted (keeping original user-based check)
 function hasUserVoted() {
     const userId = tg.initDataUnsafe.user?.id || 'anonymous';
     const voteKey = `vote_${userId}`;
@@ -50,8 +80,8 @@ function markUserVoted() {
     localStorage.setItem(voteKey, 'true');
 }
 
-// Disable voting UI if user has already voted
-function disableVotingUI() {
+// Disable voting UI if user or IP has already voted
+async function disableVotingUI() {
     document.querySelectorAll('.nominee').forEach(nominee => {
         nominee.style.pointerEvents = 'none';
         nominee.style.opacity = '0.5';
@@ -63,11 +93,13 @@ function disableVotingUI() {
 }
 
 // Check voting status on app load
-if (hasUserVoted()) {
-    disableVotingUI();
-    switchTab('tab5'); // Show thank you tab
-    thankYou.style.display = 'block';
-}
+(async () => {
+    if (hasUserVoted() || await hasIPVoted()) {
+        disableVotingUI();
+        switchTab('tab5');
+        thankYou.style.display = 'block';
+    }
+})();
 
 function playSound(sound) {
     if (sound) {
@@ -201,9 +233,9 @@ function checkAllVotes() {
     }
 }
 
-submitVotes.addEventListener('click', () => {
+submitVotes.addEventListener('click', async () => {
     playSound(clickSound);
-    if (hasUserVoted()) {
+    if (hasUserVoted() || await hasIPVoted()) {
         infoText.textContent = 'Вы уже проголосовали!';
         infoPanel.style.display = 'flex';
         return;
@@ -212,8 +244,9 @@ submitVotes.addEventListener('click', () => {
     const userId = tg.initDataUnsafe.user?.id || 'Аноним';
     const username = tg.initDataUnsafe.user?.username || 'Аноним';
     
-    // Mark user as voted
+    // Mark user and IP as voted
     markUserVoted();
+    await markIPVoted();
     
     // Send vote to Telegram
     sendVoteToTelegram(userId, username, selectedNominees);
@@ -224,10 +257,11 @@ submitVotes.addEventListener('click', () => {
     setTimeout(() => tg.close(), 3000);
 });
 
-function sendVoteToTelegram(userId, username, selectedNominees) {
+async function sendVoteToTelegram(userId, username, selectedNominees) {
     const botToken = '7896921651:AAHvSknX1BImERrKpfk_gAsG6fissqVcrfc';
     const chatId = '-1002626436094';
-    const message = `@${username} проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `${row}: ${nominee}`).join('\n')}`;
+    const ip = await getClientIP();
+    const message = `@${username} (IP: ${ip || 'Неизвестно'}) проголосовал за:\n${Object.entries(selectedNominees).map(([row, nominee]) => `${row}: ${nominee}`).join('\n')}`;
 
     fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
